@@ -1,5 +1,5 @@
 services:
-  dev.araozu.music:
+  music-to-go:
     container_name: music-to-go
     build:
       context: .
@@ -7,3 +7,15 @@ services:
     ports:
       - "8007:8007"
     restart: unless-stopped
+  music-to-go-db:
+    image: postgres
+    container_name: music-to-go-db
+    restart: unless-stopped
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+
