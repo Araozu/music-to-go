@@ -22,8 +22,8 @@ pipeline {
 		stage('Profit') {
 			steps {
 				dir('docker') {
-					sh 'docker compose stop || true'
-					sh 'docker compose up --force-recreate -d'
+					sh 'docker-compose stop || true'
+					sh 'docker-compose up -d --build'
 				}
 			}
 		}
