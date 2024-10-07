@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	stages {
-		stage('Install') {
+		stage('Build go binary') {
 			agent {
 				docker {
 					image 'golang:1.23-alpine'
@@ -11,6 +11,19 @@ pipeline {
 			steps {
 				sh 'go mod tidy'
 				sh 'go build main.go'
+			}
+		}
+		stage('Build static assets') {
+			agent {
+				docker {
+					image 'node:22'
+					reuseNode true
+				}
+			}
+			steps {
+				sh 'npm i -g pnpm'
+				sh 'pnpm i'
+				sh 'pnpm build'
 			}
 		}
 		stage('Populate env') {
