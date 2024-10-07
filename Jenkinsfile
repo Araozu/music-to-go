@@ -23,7 +23,7 @@ pipeline {
 			steps {
 				dir('docker') {
 					sh 'docker compose stop || true'
-					sh 'docker compose up --build -d'
+					sh 'docker compose up --force-recreate -d'
 				}
 			}
 		}
