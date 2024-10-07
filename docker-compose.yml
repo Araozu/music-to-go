@@ -1,12 +1,17 @@
 services:
   music-to-go:
     container_name: music-to-go
+    depends_on:
+      - music-to-go-db
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8007:8007"
     restart: unless-stopped
+    networks:
+      - music-to-go-network
+
   music-to-go-db:
     image: postgres
     container_name: music-to-go-db
@@ -18,4 +23,10 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+    networks:
+      - music-to-go-network
+
+networks:
+  music-to-go-network:
+    driver: bridge
 
