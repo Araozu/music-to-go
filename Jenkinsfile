@@ -14,8 +14,10 @@ pipeline {
 			}
 		}
 		stage('Populate env') {
-			sh 'rm .env || true'
-			sh 'echo "PORT=8007" > .env'
+			steps {
+				sh 'rm .env || true'
+				sh 'echo "PORT=8007" > .env'
+			}
 		}
 		stage('Profit') {
 			steps {
