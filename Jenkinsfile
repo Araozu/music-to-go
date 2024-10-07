@@ -1,7 +1,7 @@
 pipeline {
 agent {
 	docker {
-		image 'golang:1.23'
+		image 'golang:1.23-alpine'
 		}
 	}
 	stages {
@@ -15,14 +15,12 @@ agent {
 				sh 'go build main.go'
 			}
 		}
-		stage('???') {
-			steps {
-				sh 'echo "TODO: call docker compose up"'
-			}
-		}
 		stage('Profit') {
 			steps {
-				sh 'echo "done"'
+				dir('docker') {
+					sh 'docker compose stop || true'
+					sh 'docker compose up --build -d'
+				}
 			}
 		}
 	}

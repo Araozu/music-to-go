@@ -1,0 +1,9 @@
+services:
+  dev.araozu.music:
+    container_name: music-to-go
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8007"
+    restart: unless-stopped
