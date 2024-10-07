@@ -1,19 +1,21 @@
 pipeline {
-agent {
-	docker {
-		image 'golang:1.23-alpine'
-		}
-	}
+	agent any
 	stages {
-		stage('Install deps') {
+		stage('Install') {
+			agent {
+				docker {
+					image 'golang:1.23-alpine'
+					reuseNode true
+				}
+			}
 			steps {
 				sh 'go mod tidy'
-			}
-		}
-		stage('Build binary') {
-			steps {
 				sh 'go build main.go'
 			}
+		}
+		stage('Populate env') {
+			sh 'rm .env || true'
+			sh 'echo "PORT=8007" > .env'
 		}
 		stage('Profit') {
 			steps {
