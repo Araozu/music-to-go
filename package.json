@@ -1,0 +1,20 @@
+{
+  "name": "acide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.go",
+  "scripts": {
+    "dev": "concurrently 'air' 'tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch' 'templ generate --watch'",
+    "air": "air",
+    "tailwind:watch": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
+    "tailwind:build": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify",
+    "temple:watch": "templ generate --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "tailwindcss": "^3.4.13"
+  }
+}
