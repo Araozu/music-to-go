@@ -95,13 +95,14 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click js play('%s', '%s', '%s')",
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click js play('%s', '%s', '%s', '%s')",
 					utils.EscapeSingle(song.Title),
 					utils.EscapeSingle(song.Artist),
+					albumId,
 					song.ID,
 				))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 26, Col: 7}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 27, Col: 7}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -114,7 +115,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(song.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 28, Col: 18}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 29, Col: 18}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {

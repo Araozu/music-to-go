@@ -68,7 +68,7 @@ func MusicPlayer() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"music-player\" class=\"fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white\"><div class=\"h-12 bg-sky-200 rounded\">&nbsp;</div><div class=\"w-full overflow-hidden\"><p id=\"music-player-title\" class=\"overflow-hidden overflow-ellipsis whitespace-nowrap w-full\">-</p><p id=\"music-player-artist\" class=\"text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full\">-</p></div><div class=\"flex items-center justify-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"music-player\" class=\"fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white\"><div class=\"h-12 bg-sky-200 rounded\"><img id=\"music-player-img\"></div><div class=\"w-full overflow-hidden\"><p id=\"music-player-title\" class=\"overflow-hidden overflow-ellipsis whitespace-nowrap w-full\">-</p><p id=\"music-player-artist\" class=\"text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full\">-</p></div><div class=\"flex items-center justify-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -84,7 +84,7 @@ func MusicPlayer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><script>\n\t\tconst playerTitle = document.getElementById(\"music-player-title\");\n\t\tconst playerArtist = document.getElementById(\"music-player-artist\");\n\n\t\tlet currentSound = null;\n\n\t\tasync function play(title, artist, songId) {\n\t\t\tplayerTitle.innerText = title;\n\t\t\tplayerArtist.innerText = artist;\n\n\t\t\tif (currentSound !== null) {\n\t\t\t\tcurrentSound.fade(1.0, 0.0, 250);\n\t\t\t\tawait wait(250);\n\t\t\t\tcurrentSound.unload();\n\t\t\t}\n\t\t\t\n\t\t\tcurrentSound = new Howl({\n\t\t\t\tsrc: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],\n\t\t\t\thtml5: true,\n\t\t\t});\n\t\t\tcurrentSound.play();\n\t\t}\n\t\t\n\t\tfunction wait(ms) {\n\t\t\treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t}\n\t</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><script>\n\t\tconst playerImage = document.getElementById(\"music-player-img\");\n\t\tconst playerTitle = document.getElementById(\"music-player-title\");\n\t\tconst playerArtist = document.getElementById(\"music-player-artist\");\n\n\t\tlet currentSound = null;\n\n\t\tasync function play(title, artist, albumId, songId) {\n\t\t\tplayerImage.src = `/covers/${albumId}`;\n\t\t\tplayerTitle.innerText = title;\n\t\t\tplayerArtist.innerText = artist;\n\n\t\t\tif (currentSound !== null) {\n\t\t\t\tcurrentSound.fade(1.0, 0.0, 250);\n\t\t\t\tawait wait(250);\n\t\t\t\tcurrentSound.unload();\n\t\t\t}\n\n\t\t\tcurrentSound = new Howl({\n\t\t\t\tsrc: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],\n\t\t\t\thtml5: true,\n\t\t\t});\n\t\t\tcurrentSound.play();\n\t\t}\n\n\t\tfunction wait(ms) {\n\t\t\treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t}\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -113,14 +113,14 @@ func playIcon(size int) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<svg id=\"\" xmlns=\"http://www.w3.org/2000/svg\" width=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 80, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 83, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -133,7 +133,7 @@ func playIcon(size int) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 81, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 84, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -175,7 +175,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 92, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 95, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -188,7 +188,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 92, Col: 97}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 95, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

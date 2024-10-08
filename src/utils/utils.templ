@@ -32,7 +32,7 @@ templ MusicPlayer() {
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
 	>
 		<div class="h-12 bg-sky-200 rounded">
-			&nbsp;
+			<img id="music-player-img"/>
 		</div>
 		<div class="w-full overflow-hidden">
 			<p id="music-player-title" class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
@@ -46,12 +46,14 @@ templ MusicPlayer() {
 		</button>
 	</div>
 	<script>
+		const playerImage = document.getElementById("music-player-img");
 		const playerTitle = document.getElementById("music-player-title");
 		const playerArtist = document.getElementById("music-player-artist");
 
 		let currentSound = null;
 
-		async function play(title, artist, songId) {
+		async function play(title, artist, albumId, songId) {
+			playerImage.src = `/covers/${albumId}`;
 			playerTitle.innerText = title;
 			playerArtist.innerText = artist;
 
@@ -60,14 +62,14 @@ templ MusicPlayer() {
 				await wait(250);
 				currentSound.unload();
 			}
-			
+
 			currentSound = new Howl({
 				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
 				html5: true,
 			});
 			currentSound.play();
 		}
-		
+
 		function wait(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		}
@@ -76,6 +78,7 @@ templ MusicPlayer() {
 
 templ playIcon(size int) {
 	<svg
+		id=""
 		xmlns="http://www.w3.org/2000/svg"
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
