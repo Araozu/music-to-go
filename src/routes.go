@@ -2,6 +2,7 @@ package src
 
 import (
 	"acide/src/modules/auth"
+	"acide/src/modules/covers"
 	"acide/src/modules/index"
 	"net/http"
 	"os"
@@ -27,6 +28,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	// NOTE: Register subroutes here
 	index.SetupRoutes(e.Group(""))
 	auth.SetupRoutes(e.Group("/auth"))
+	covers.Setup(e.Group("/covers"))
 
 	return e
 }

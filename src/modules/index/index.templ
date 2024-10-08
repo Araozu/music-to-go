@@ -1,11 +1,35 @@
 package index
 
-import "acide/src/utils"
+import (
+	"acide/src/utils"
+	"fmt"
+)
 
-templ IndexTempl() {
+templ IndexTempl(albums []utils.Album) {
 	@utils.SkeletonTempl() {
 		<div>
-			Home page :D
+			<nav class="text-blue-500 font-bold text-xl py-2 border-b border-blue-500">
+				music to go
+			</nav>
+			<div class="overflow-x-scroll whitespace-nowrap py-2">
+				for _, album := range albums {
+					@albumCard(album)
+				}
+			</div>
 		</div>
 	}
+}
+
+templ albumCard(album utils.Album) {
+	<div class="inline-block p-1 mx-1 rounded bg-zinc-200 w-32">
+		<div class="h-30 relative">
+			<img src={ fmt.Sprintf("/covers/%s", album.ID) }/>
+			<div class="overflow-hidden overflow-ellipsis">
+				{ album.Name }
+			</div>
+			<div class="overflow-hidden overflow-ellipsis text-sm">
+				{ album.Artist }
+			</div>
+		</div>
+	</div>
 }

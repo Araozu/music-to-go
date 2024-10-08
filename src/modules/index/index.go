@@ -2,28 +2,28 @@ package index
 
 import (
 	"acide/src/utils"
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
 )
 
-// Registers all the routes that this module (auth) provides
 func SetupRoutes(g *echo.Group) {
 	log.Print("Setting up the index module")
+
+	g.Use(utils.Authed)
 
 	// To include custom rendering logic:
 	g.GET("/", indexPage)
 }
 
 func indexPage(c echo.Context) error {
-	// If the required cookies are set, redirect to home
-	_, err1 := c.Cookie("session-token")
-	_, err2 := c.Cookie("navidrome-url")
-
-	if err1 != nil || err2 != nil {
-		return c.Redirect(http.StatusFound, "/auth/")
+	sessionToken, navidromeUrl := utils.Credentials(c)
+	albums, err := getRandomAlbums(sessionToken, navidromeUrl, 10)
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, fmt.Sprintf("%s", err))
 	}
 
-	return utils.RenderTempl(c, http.StatusOK, IndexTempl())
+	return utils.RenderTempl(c, http.StatusOK, IndexTempl(albums))
 }

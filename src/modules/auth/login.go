@@ -11,6 +11,12 @@ import (
 
 // Renders the loginPage form
 func loginPage(c echo.Context) error {
+	// if the request has the required cookies, redirect to /
+	_, err := c.Cookie("session-token")
+	_, err2 := c.Cookie("navidrome-url")
+	if err == nil && err2 == nil {
+		return c.Redirect(http.StatusFound, "/")
+	}
 
 	return utils.RenderTempl(c, http.StatusOK, LoginTempl())
 }
@@ -36,6 +42,7 @@ func loginFragment(c echo.Context) error {
 	cookie1.Path = "/"
 	cookie1.HttpOnly = true
 	cookie1.Secure = true
+	cookie1.SameSite = http.SameSiteStrictMode
 	c.SetCookie(cookie1)
 
 	cookie2 := new(http.Cookie)
@@ -45,6 +52,7 @@ func loginFragment(c echo.Context) error {
 	cookie2.Path = "/"
 	cookie2.HttpOnly = true
 	cookie2.Secure = true
+	cookie2.SameSite = http.SameSiteStrictMode
 	c.SetCookie(cookie2)
 
 	return c.HTML(http.StatusOK, "<div _=\"init js window.location.href = '/'\">Logged in, redirecting...</div>")
