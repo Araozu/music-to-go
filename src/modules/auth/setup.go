@@ -26,5 +26,6 @@ func SetupRoutes(g *echo.Group) {
 	// g.GET("/login", echo.WrapHandler(templ.Handler(LoginTempl())))
 
 	// To include custom rendering logic:
-	g.GET("/login", login)
+	g.GET("/", loginPage)
+	g.POST("/f/login", loginFragment)
 }

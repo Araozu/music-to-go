@@ -1,4 +1,4 @@
-package index
+package auth
 
 import (
 	"acide/src/utils"
@@ -14,7 +14,7 @@ type AuthError struct {
 
 // Attempts to login to a navidrome server with the provided credentials.
 // Returns the session key if succesful, an error otherwise
-func login(server, username, password string) (string, error) {
+func loginService(server, username, password string) (string, error) {
 	client := resty.New()
 
 	var loginData utils.AuthSuccess
