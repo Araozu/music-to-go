@@ -1,0 +1,27 @@
+package album
+
+import (
+	"acide/src/utils"
+	"fmt"
+)
+
+templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
+	@utils.SkeletonTempl() {
+		<div class="text-center">
+			<img class="inline-block mt-2 rounded shadow" src={ fmt.Sprintf("/covers/%s", albumId) }/>
+			<h1 class="font-bold pt-4 pb-2 text-2xl">
+				{ album.Name }
+			</h1>
+			<p>
+				{ album.Artist }
+			</p>
+			<div class="text-left">
+				for _, song := range songs {
+					<p class="py-2 px-4">
+						{ song.Title }
+					</p>
+				}
+			</div>
+		</div>
+	}
+}

@@ -11,6 +11,9 @@ templ IndexTempl(albums []utils.Album) {
 			<nav class="text-blue-500 font-bold text-xl py-2 border-b border-blue-500">
 				music to go
 			</nav>
+			<h2 class="font-bold text-xl px-2 pt-4">
+				Random Albums
+			</h2>
 			<div class="overflow-x-scroll whitespace-nowrap py-2">
 				for _, album := range albums {
 					@albumCard(album)
@@ -24,9 +27,12 @@ templ albumCard(album utils.Album) {
 	<div class="inline-block p-1 mx-1 rounded bg-zinc-200 w-32">
 		<div class="h-30 relative">
 			<img src={ fmt.Sprintf("/covers/%s", album.ID) }/>
-			<div class="overflow-hidden overflow-ellipsis">
+			<a
+				href={ templ.URL(fmt.Sprintf("/album/%s", album.ID)) }
+				class="inline-block w-full overflow-hidden overflow-ellipsis hover:underline"
+			>
 				{ album.Name }
-			</div>
+			</a>
 			<div class="overflow-hidden overflow-ellipsis text-sm">
 				{ album.Artist }
 			</div>

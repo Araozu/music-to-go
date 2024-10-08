@@ -56,3 +56,51 @@ type Album struct {
 type NavError struct {
 	Error string `json:"error"`
 }
+
+type Song struct {
+	PlayCount        int         `json:"playCount"`
+	PlayDate         time.Time   `json:"playDate"`
+	Rating           int         `json:"rating"`
+	Starred          bool        `json:"starred"`
+	StarredAt        interface{} `json:"starredAt"`
+	BookmarkPosition int         `json:"bookmarkPosition"`
+	ID               string      `json:"id"`
+	LibraryID        int         `json:"libraryId"`
+	Path             string      `json:"path"`
+	Title            string      `json:"title"`
+	Album            string      `json:"album"`
+	ArtistID         string      `json:"artistId"`
+	Artist           string      `json:"artist"`
+	AlbumArtistID    string      `json:"albumArtistId"`
+	AlbumArtist      string      `json:"albumArtist"`
+	AlbumID          string      `json:"albumId"`
+	HasCoverArt      bool        `json:"hasCoverArt"`
+	TrackNumber      int         `json:"trackNumber"`
+	DiscNumber       int         `json:"discNumber"`
+	Year             int         `json:"year"`
+	OriginalYear     int         `json:"originalYear"`
+	ReleaseYear      int         `json:"releaseYear"`
+	Size             int         `json:"size"`
+	Suffix           string      `json:"suffix"`
+	Duration         float64     `json:"duration"`
+	BitRate          int         `json:"bitRate"`
+	SampleRate       int         `json:"sampleRate"`
+	Channels         int         `json:"channels"`
+	Genre            string      `json:"genre"`
+	Genres           []struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"genres"`
+	OrderTitle           string    `json:"orderTitle"`
+	OrderAlbumName       string    `json:"orderAlbumName"`
+	OrderArtistName      string    `json:"orderArtistName"`
+	OrderAlbumArtistName string    `json:"orderAlbumArtistName"`
+	Compilation          bool      `json:"compilation"`
+	Lyrics               string    `json:"lyrics"`
+	RgAlbumGain          int       `json:"rgAlbumGain"`
+	RgAlbumPeak          int       `json:"rgAlbumPeak"`
+	RgTrackGain          int       `json:"rgTrackGain"`
+	RgTrackPeak          int       `json:"rgTrackPeak"`
+	CreatedAt            time.Time `json:"createdAt"`
+	UpdatedAt            time.Time `json:"updatedAt"`
+}
