@@ -8,6 +8,8 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
+require github.com/go-resty/resty/v2 v2.15.3 // indirect
+
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

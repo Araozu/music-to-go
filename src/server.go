@@ -1,7 +1,6 @@
 package src
 
 import (
-	"acide/src/database"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,13 +8,10 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
-
-	"gorm.io/gorm"
 )
 
 type Server struct {
 	port int
-	db   *gorm.DB
 }
 
 // Creates a new Server
@@ -28,7 +24,6 @@ func NewServer() *http.Server {
 
 	NewServer := &Server{
 		port: port,
-		db:   database.New(),
 	}
 
 	// TODO: Register DB schemas here

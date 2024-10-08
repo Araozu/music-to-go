@@ -2,6 +2,7 @@ package src
 
 import (
 	"acide/src/modules/auth"
+	"acide/src/modules/index"
 	"net/http"
 	"os"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-var dev = os.Getenv("DEV") != ""
+var dev = os.Getenv("APP_ENV") == "dev"
 
 // Sets up the Echo server, and registers all routes and sub routes
 func (s *Server) RegisterRoutes() http.Handler {
@@ -23,13 +24,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 		http.FileServer(http.Dir("public"))))
 	e.GET("/public/*", echo.WrapHandler(staticFilesFolder))
 
-	// TODO: Register subroutes here
-	// login.SetupRoutes(e.Group("/auth"))
+	// NOTE: Register subroutes here
+	index.SetupRoutes(e.Group(""))
 	auth.SetupRoutes(e.Group("/auth"))
-
-	e.GET("/", func(ctx echo.Context) error {
-		return ctx.String(http.StatusOK, "Hello")
-	})
 
 	return e
 }

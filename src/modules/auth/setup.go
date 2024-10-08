@@ -7,13 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// Represents a User in the Database
-type User struct {
-	gorm.Model
-	Name     string
-	Password string
-}
-
 // A package-level database handle.
 // It is set up by the [SetupSchema] func,
 // which should be called before the webserver
@@ -23,8 +16,6 @@ var db *gorm.DB
 // Creates all the database tables that this module requires,
 // and sets up the database handle for this module
 func SetupSchema(dbHandle *gorm.DB) {
-	dbHandle.AutoMigrate(&User{})
-	db = dbHandle
 }
 
 // Registers all the routes that this module (auth) provides
