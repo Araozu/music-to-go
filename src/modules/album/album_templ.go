@@ -95,9 +95,13 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click js playMusic('%s');", song.ID))
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click js play('%s', '%s', '%s')",
+					utils.EscapeSingle(song.Title),
+					utils.EscapeSingle(song.Artist),
+					song.ID,
+				))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 20, Col: 82}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 26, Col: 7}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -110,7 +114,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(song.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 21, Col: 18}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/modules/album/album.templ`, Line: 28, Col: 18}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -121,7 +125,11 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><script>\n\t\tfunction playMusic(songId) {\n\t\t\tconst sound = new Howl({\n\t\t\t\tsrc: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],\n\t\t\t\thtml5: true,\n\t\t\t});\n\t\t\tsound.play();\n\t\t}\n\t\t</script>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = utils.MusicPlayer().Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

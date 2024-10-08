@@ -1,5 +1,7 @@
 package utils
 
+import "strconv"
+
 templ SkeletonTempl() {
 	<!DOCTYPE html>
 	<html lang="es">
@@ -17,9 +19,77 @@ templ SkeletonTempl() {
 			<script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js" defer></script>
 		</head>
 		<body>
-			<main>
+			<main class="pb-16">
 				{ children... }
 			</main>
 		</body>
 	</html>
+}
+
+templ MusicPlayer() {
+	<div
+		id="music-player"
+		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
+	>
+		<div class="h-12 bg-sky-200 rounded">
+			&nbsp;
+		</div>
+		<div class="w-full overflow-hidden">
+			<p id="music-player-title" class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
+			<p id="music-player-artist" class="text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
+		</div>
+		<div class="flex items-center justify-center">
+			@playIcon(26)
+		</div>
+		<button class="flex items-center justify-center">
+			@skipForwardIcon(24)
+		</button>
+	</div>
+	<script>
+		const playerTitle = document.getElementById("music-player-title");
+		const playerArtist = document.getElementById("music-player-artist");
+
+		let currentSound = null;
+
+		async function play(title, artist, songId) {
+			playerTitle.innerText = title;
+			playerArtist.innerText = artist;
+
+			if (currentSound !== null) {
+				currentSound.fade(1.0, 0.0, 250);
+				await wait(250);
+				currentSound.unload();
+			}
+			
+			currentSound = new Howl({
+				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
+				html5: true,
+			});
+			currentSound.play();
+		}
+		
+		function wait(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+	</script>
+}
+
+templ playIcon(size int) {
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width={ strconv.Itoa(size) }
+		height={ strconv.Itoa(size) }
+		fill="#000000"
+		viewBox="0 0 256 256"
+		style="--darkreader-inline-fill: #000000;"
+		data-darkreader-inline-fill=""
+	>
+		<path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"></path>
+	</svg>
+}
+
+templ skipForwardIcon(size int) {
+	<svg xmlns="http://www.w3.org/2000/svg" width={ strconv.Itoa(size) } height={ strconv.Itoa(size) } fill="#000000" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill="">
+		<path d="M208,40V216a8,8,0,0,1-16,0V146.77L72.43,221.55A15.95,15.95,0,0,1,48,208.12V47.88A15.95,15.95,0,0,1,72.43,34.45L192,109.23V40a8,8,0,0,1,16,0Z"></path>
+	</svg>
 }

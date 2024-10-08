@@ -3,10 +3,10 @@ package index
 import (
 	"acide/src/utils"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 )
 
 func SetupRoutes(g *echo.Group) {

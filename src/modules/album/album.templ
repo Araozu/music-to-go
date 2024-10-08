@@ -17,20 +17,19 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 			</p>
 			<div class="text-left">
 				for _, song := range songs {
-					<p class="py-2 px-4" _={ fmt.Sprintf("on click js playMusic('%s');", song.ID) }>
+					<p
+						class="py-2 px-4"
+						_={ fmt.Sprintf("on click js play('%s', '%s', '%s')", 
+							utils.EscapeSingle(song.Title),
+							utils.EscapeSingle(song.Artist),
+							song.ID,
+						) }
+					>
 						{ song.Title }
 					</p>
 				}
 			</div>
 		</div>
-		<script>
-		function playMusic(songId) {
-			const sound = new Howl({
-				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
-				html5: true,
-			});
-			sound.play();
-		}
-		</script>
+		@utils.MusicPlayer()
 	}
 }

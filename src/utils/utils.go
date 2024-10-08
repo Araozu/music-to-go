@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo"
@@ -58,4 +59,8 @@ func Credentials(c echo.Context) (string, string) {
 	}
 
 	return sessionToken.Value, navidromeUrl.Value
+}
+
+func EscapeSingle(s string) string {
+	return strings.ReplaceAll(s, "'", "\\'")
 }
