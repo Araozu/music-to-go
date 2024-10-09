@@ -3,4 +3,5 @@ public/css/output.css
 .env
 tmp
 main
+src/**/*_templ.go
 

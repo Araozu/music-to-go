@@ -30,7 +30,7 @@ templ MusicPlayer() {
 	<div
 		id="music-player"
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
-		_="init set $sound to null then set $playing to false"
+		_="init set $sound to null then set $playing to false then set $volume to 0.1"
 	>
 		<div class="h-12 bg-sky-200 rounded">
 			<img id="music-player-img"/>
@@ -54,13 +54,12 @@ templ MusicPlayer() {
 			put artist into #music-player-artist's innerHTML
 
 			-- Update icons
-			toggle .hidden on #play-icon
-			toggle .hidden on #pause-icon
-
 			set $playing to true
+			add .hidden to #play-icon
+			remove .hidden from #pause-icon
 
 			if $sound exists
-				$sound.fade(1.0, 0.0, 250)
+				$sound.fade($volume, 0.0, 250)
 				wait 250ms
 				$sound.unload()
 			end
@@ -68,19 +67,20 @@ templ MusicPlayer() {
 			make a Howl from {
 				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
 				html5: true,
-				volume: 0.1
+				volume: $volume
 			} called $sound
 			$sound.play()
 		end
 
 		def togglePlaying()
-			toggle .hidden on #play-icon
-			toggle .hidden on #pause-icon
-
 			if $playing is true
+				remove .hidden from #play-icon
+				add .hidden to #pause-icon
 				set $playing to false
 				$sound.pause()
 			else
+				add .hidden to #play-icon
+				remove .hidden from #pause-icon
 				set $playing to true
 				$sound.play()
 			end
