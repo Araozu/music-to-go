@@ -51,7 +51,7 @@ func IndexTempl(albums []utils.Album) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, album := range albums {
-				templ_7745c5c3_Err = albumCard(album).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = AlbumCard(album).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -74,7 +74,7 @@ func IndexTempl(albums []utils.Album) templ.Component {
 	})
 }
 
-func albumCard(album utils.Album) templ.Component {
+func AlbumCard(album utils.Album) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -95,7 +95,7 @@ func albumCard(album utils.Album) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"inline-block p-1 mx-1 rounded bg-zinc-200 w-32\"><div class=\"h-30 relative\"><img src=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"inline-block p-1 rounded bg-zinc-200 max-w-32\"><div class=\"h-30 relative\"><img src=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

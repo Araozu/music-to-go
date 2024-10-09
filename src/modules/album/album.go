@@ -19,7 +19,14 @@ func Setup(g *echo.Group) {
 }
 
 func allAlbumsPage(c echo.Context) error {
-	return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl())
+	// get the first 10 albums
+	token, server := utils.Credentials(c)
+	albums, err := loadAlbums(token, server, 0, 30)
+	if err != nil {
+		return err
+	}
+
+	return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl(albums))
 }
 
 func albumPage(c echo.Context) error {

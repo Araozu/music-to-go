@@ -1,19 +1,29 @@
 package album
 
 import (
+	"acide/src/modules/index"
 	"acide/src/utils"
 	"fmt"
 	"strconv"
 )
 
-templ allAlbumsTempl() {
+// Renders a page with all albums passed to it
+templ allAlbumsTempl(albums []utils.Album) {
 	@utils.SkeletonTempl() {
 		<div>
-			:D
+			<h1 class="font-bold pt-4 pb-2 text-2xl">
+				Albums
+			</h1>
+			<div class="grid grid-cols-3 gap-2">
+				for _, album := range albums {
+					@index.AlbumCard(album)
+				}
+			</div>
 		</div>
 	}
 }
 
+// Renders the page of a single Album
 templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 	@utils.SkeletonTempl() {
 		<div class="text-center">

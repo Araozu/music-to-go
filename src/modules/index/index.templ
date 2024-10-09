@@ -15,15 +15,15 @@ templ IndexTempl(albums []utils.Album) {
 		</h2>
 		<div class="overflow-x-scroll whitespace-nowrap py-2">
 			for _, album := range albums {
-				@albumCard(album)
+				@AlbumCard(album)
 			}
 		</div>
 		@utils.MusicPlayer()
 	}
 }
 
-templ albumCard(album utils.Album) {
-	<div class="inline-block p-1 mx-1 rounded bg-zinc-200 w-32">
+templ AlbumCard(album utils.Album) {
+	<div class="inline-block p-1 rounded bg-zinc-200 max-w-32">
 		<div class="h-30 relative">
 			<img src={ fmt.Sprintf("/covers/%s", album.ID) }/>
 			<a
