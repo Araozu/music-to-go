@@ -3,6 +3,7 @@ package album
 import (
 	"acide/src/utils"
 	"fmt"
+	"strconv"
 )
 
 templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
@@ -15,10 +16,10 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 			<p>
 				{ album.Artist }
 			</p>
-			<div class="text-left">
+			<div>
 				for _, song := range songs {
-					<p
-						class="py-2 px-4"
+					<button
+						class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 whitespace-nowrap overflow-hidden overflow-ellipsis"
 						_={ fmt.Sprintf("on click playSong('%s', '%s', '%s', '%s')", 
 							utils.EscapeSingle(song.Title),
 							utils.EscapeSingle(song.Artist),
@@ -26,8 +27,11 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 							song.ID,
 						) }
 					>
+						<span class="inline-block w-6 text-right opacity-75 pr-2">
+							{ strconv.Itoa(song.TrackNumber) }
+						</span>
 						{ song.Title }
-					</p>
+					</button>
 				}
 			</div>
 		</div>

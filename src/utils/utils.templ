@@ -39,11 +39,14 @@ templ MusicPlayer() {
 			<p id="music-player-title" class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
 			<p id="music-player-artist" class="text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
 		</div>
-		<div class="flex items-center justify-center" _="on click togglePlaying()">
+		<div
+			class="flex items-center justify-center cursor-pointer"
+			_="on click togglePlaying()"
+		>
 			@playIcon(26)
 			@pauseIcon(26)
 		</div>
-		<button class="flex items-center justify-center" _="on click log $sound">
+		<button class="flex items-center justify-center">
 			@skipForwardIcon(24)
 		</button>
 	</div>
