@@ -1,6 +1,17 @@
 pipeline {
 	agent any
 	stages {
+		stage('Build templ files') {
+			agent {
+				docker {
+					image 'ghcr.io/a-h/templ:latest'
+					reuseNode true
+				}
+			}
+			steps {
+				sh 'templ generate'
+			}
+		}
 		stage('Build go binary') {
 			agent {
 				docker {
@@ -9,8 +20,6 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'go install github.com/a-h/templ/cmd/templ@latest'
-				sh 'templ generate'
 				sh 'go mod tidy'
 				sh 'go build main.go'
 			}
