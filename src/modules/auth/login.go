@@ -55,5 +55,5 @@ func loginFragment(c echo.Context) error {
 	cookie2.SameSite = http.SameSiteStrictMode
 	c.SetCookie(cookie2)
 
-	return c.HTML(http.StatusOK, "<div _=\"init js window.location.href = '/'\">Logged in, redirecting...</div>")
+	return c.HTML(http.StatusOK, "<div _=\"init go to url '/'\">Logged in, redirecting...</div>")
 }

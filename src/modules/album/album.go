@@ -14,7 +14,12 @@ func Setup(g *echo.Group) {
 	log.Print("Setting up the album module")
 	g.Use(utils.Authed)
 
+	g.GET("/", allAlbumsPage)
 	g.GET("/:id", albumPage)
+}
+
+func allAlbumsPage(c echo.Context) error {
+	return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl())
 }
 
 func albumPage(c echo.Context) error {

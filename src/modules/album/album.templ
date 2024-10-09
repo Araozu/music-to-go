@@ -6,6 +6,14 @@ import (
 	"strconv"
 )
 
+templ allAlbumsTempl() {
+	@utils.SkeletonTempl() {
+		<div>
+			:D
+		</div>
+	}
+}
+
 templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 	@utils.SkeletonTempl() {
 		<div class="text-center">
