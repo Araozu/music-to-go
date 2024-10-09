@@ -33,16 +33,17 @@ templ MusicPlayer() {
 		_="init set $sound to null then set $playing to false then set $volume to 0.1"
 	>
 		<div class="h-12 bg-sky-200 rounded">
-			<img id="music-player-img"/>
+			<img class="rounded" id="music-player-img"/>
 		</div>
 		<div class="w-full overflow-hidden">
 			<p id="music-player-title" class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
 			<p id="music-player-artist" class="text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
 		</div>
 		<div
-			class="flex items-center justify-center cursor-pointer"
+			class="flex items-center justify-center cursor-pointer relative"
 			_="on click togglePlaying()"
 		>
+			@circleNotchIcon("hidden absolute animate-spin", 48)
 			@playIcon(26)
 			@pauseIcon(26)
 		</div>
@@ -51,6 +52,11 @@ templ MusicPlayer() {
 		</button>
 	</div>
 	<script type="text/hyperscript">
+		def onSongEnd()
+			set $playing to false
+			updateUi(false)
+		end
+
 		def playSong(title, artist, albumId, songId)
 			set #music-player-img's @src to "/covers/" + albumId
 			put title into #music-player-title's innerHTML
@@ -58,8 +64,8 @@ templ MusicPlayer() {
 
 			-- Update icons
 			set $playing to true
-			add .hidden to #play-icon
-			remove .hidden from #pause-icon
+			remove .hidden from #spinner
+			updateUi(false)
 
 			if $sound exists
 				$sound.fade($volume, 0.0, 250)
@@ -73,18 +79,33 @@ templ MusicPlayer() {
 				volume: $volume
 			} called $sound
 			$sound.play()
+			$sound.once("load", onSongLoaded)
+			js $sound.once("end", () => onSongEnd())
+		end
+
+		def onSongLoaded()
+			add .hidden to #spinner
+			updateUi(true)
+		end
+
+		def updateUi(playing)
+			if playing is true
+				add .hidden to #play-icon
+				remove .hidden from #pause-icon
+			else
+				remove .hidden from #play-icon
+				add .hidden to #pause-icon
+			end
 		end
 
 		def togglePlaying()
 			if $playing is true
-				remove .hidden from #play-icon
-				add .hidden to #pause-icon
 				set $playing to false
+				updateUi(false)
 				$sound.pause()
 			else
-				add .hidden to #play-icon
-				remove .hidden from #pause-icon
 				set $playing to true
+				updateUi(true)
 				$sound.play()
 			end
 		end
@@ -125,5 +146,21 @@ templ pauseIcon(size int) {
 templ skipForwardIcon(size int) {
 	<svg xmlns="http://www.w3.org/2000/svg" width={ strconv.Itoa(size) } height={ strconv.Itoa(size) } fill="#000000" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill="">
 		<path d="M208,40V216a8,8,0,0,1-16,0V146.77L72.43,221.55A15.95,15.95,0,0,1,48,208.12V47.88A15.95,15.95,0,0,1,72.43,34.45L192,109.23V40a8,8,0,0,1,16,0Z"></path>
+	</svg>
+}
+
+templ circleNotchIcon(class string, size int) {
+	<svg
+		id="spinner"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="#000000"
+		viewBox="0 0 256 256"
+		style="--darkreader-inline-fill: #000000;"
+		data-darkreader-inline-fill=""
+		width={ strconv.Itoa(size) }
+		height={ strconv.Itoa(size) }
+		class={ class }
+	>
+		<path d="M232,128a104,104,0,0,1-208,0c0-41,23.81-78.36,60.66-95.27a8,8,0,0,1,6.68,14.54C60.15,61.59,40,93.27,40,128a88,88,0,0,0,176,0c0-34.73-20.15-66.41-51.34-80.73a8,8,0,0,1,6.68-14.54C208.19,49.64,232,87,232,128Z"></path>
 	</svg>
 }
