@@ -9,6 +9,8 @@ pipeline {
 				}
 			}
 			steps {
+				sh 'go install github.com/a-h/templ/cmd/templ@latest'
+				sh 'templ generate'
 				sh 'go mod tidy'
 				sh 'go build main.go'
 			}
