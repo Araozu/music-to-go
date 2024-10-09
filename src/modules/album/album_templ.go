@@ -95,7 +95,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song) templ.Co
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click js play('%s', '%s', '%s', '%s')",
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("on click playSong('%s', '%s', '%s', '%s')",
 					utils.EscapeSingle(song.Title),
 					utils.EscapeSingle(song.Artist),
 					albumId,

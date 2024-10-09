@@ -30,6 +30,7 @@ templ MusicPlayer() {
 	<div
 		id="music-player"
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
+		_="init set $sound to null"
 	>
 		<div class="h-12 bg-sky-200 rounded">
 			<img id="music-player-img"/>
@@ -41,38 +42,28 @@ templ MusicPlayer() {
 		<div class="flex items-center justify-center">
 			@playIcon(26)
 		</div>
-		<button class="flex items-center justify-center">
+		<button class="flex items-center justify-center" _="on click log $sound">
 			@skipForwardIcon(24)
 		</button>
 	</div>
-	<script>
-		const playerImage = document.getElementById("music-player-img");
-		const playerTitle = document.getElementById("music-player-title");
-		const playerArtist = document.getElementById("music-player-artist");
+	<script type="text/hyperscript">
+		def playSong(title, artist, albumId, songId)
+			set #music-player-img's @src to "/covers/" + albumId
+			put title into #music-player-title's innerHTML
+			put artist into #music-player-artist's innerHTML
 
-		let currentSound = null;
+			if $sound exists
+				$sound.fade(1.0, 0.0, 250)
+				wait 250ms
+				$sound.unload()
+			end
 
-		async function play(title, artist, albumId, songId) {
-			playerImage.src = `/covers/${albumId}`;
-			playerTitle.innerText = title;
-			playerArtist.innerText = artist;
-
-			if (currentSound !== null) {
-				currentSound.fade(1.0, 0.0, 250);
-				await wait(250);
-				currentSound.unload();
-			}
-
-			currentSound = new Howl({
+			make a Howl from {
 				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
-				html5: true,
-			});
-			currentSound.play();
-		}
-
-		function wait(ms) {
-			return new Promise(resolve => setTimeout(resolve, ms));
-		}
+				html5: true
+			} called $sound
+			$sound.play()
+		end
 	</script>
 }
 

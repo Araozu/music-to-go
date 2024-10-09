@@ -19,7 +19,7 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 				for _, song := range songs {
 					<p
 						class="py-2 px-4"
-						_={ fmt.Sprintf("on click js play('%s', '%s', '%s', '%s')", 
+						_={ fmt.Sprintf("on click playSong('%s', '%s', '%s', '%s')", 
 							utils.EscapeSingle(song.Title),
 							utils.EscapeSingle(song.Artist),
 							albumId,
