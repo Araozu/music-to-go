@@ -68,7 +68,7 @@ func MusicPlayer() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"music-player\" class=\"fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white\" x-data=\"player\"><div class=\"h-12 bg-sky-200 rounded\"><img class=\"rounded\" id=\"music-player-img\"></div><div class=\"w-full overflow-hidden\"><p id=\"music-player-title\" class=\"overflow-hidden overflow-ellipsis whitespace-nowrap w-full\" x-text=\"queue[idx]?.title ?? &#39;-&#39;\">-</p><p id=\"music-player-artist\" class=\"text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full\" x-text=\"queue[idx]?.artist ?? &#39;-&#39;\">-</p></div><div class=\"flex items-center justify-center cursor-pointer relative\" @click=\"togglePlayPause\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"music-player\" class=\"fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white\" x-data=\"player\"><div class=\"h-12 bg-sky-200 rounded\"><img class=\"rounded\" id=\"music-player-img\" :src=\"queue[idx]? `/covers/${queue[idx]?.albumId}` : &#39;&#39;\"></div><div class=\"w-full overflow-hidden\"><p id=\"music-player-title\" class=\"overflow-hidden overflow-ellipsis whitespace-nowrap w-full\" x-text=\"queue[idx]?.title ?? &#39;-&#39;\">-</p><p id=\"music-player-artist\" class=\"text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full\" x-text=\"queue[idx]?.artist ?? &#39;-&#39;\">-</p></div><div class=\"flex items-center justify-center cursor-pointer relative\" @click=\"togglePlayPause\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -92,7 +92,7 @@ func MusicPlayer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><script>\n\t\tdocument.addEventListener('alpine:init', () => {\n\t\t\tAlpine.data(\"player\", () => ({\n\t\t\t\tinit() {\n\t\t\t\t\twindow.replaceQueueAndPlayAt = (...params) => this.replaceQueueAndPlayAt(...params);\n\t\t\t\t},\n\t\t\t\tqueue: [],\n\t\t\t\tidx: 0,\n\t\t\t\tcurrentSound: null,\n\t\t\t\tvolume: 0.1,\n\t\t\t\tplaying: false,\n\t\t\t\tloading: false,\n\n\t\t\t\treplaceQueueAndPlayAt(queue, idx) {\n\t\t\t\t\tthis.queue = queue;\n\t\t\t\t\tthis.idx = idx;\n\t\t\t\t\tthis.play();\n\t\t\t\t},\n\t\t\t\tasync play() {\n\t\t\t\t\tconst songId = this.queue[this.idx].songId;\n\n\t\t\t\t\tif (this.currentSound !== null) {\n\t\t\t\t\t\tthis.currentSound.fade(this.volume, 0.0, 250);\n\t\t\t\t\t\tawait wait(250);\n\t\t\t\t\t\tthis.currentSound.unload();\n\t\t\t\t\t}\n\n\t\t\t\t\tconst sound = new Howl({\n\t\t\t\t\t\tsrc: `https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,\n\t\t\t\t\t\thtml5: true,\n\t\t\t\t\t\tvolume: this.volume,\n\t\t\t\t\t})\n\t\t\t\t\tthis.loading = true;\n\t\t\t\t\tsound.play();\n\t\t\t\t\tsound.once(\"load\", () => {\n\t\t\t\t\t\tthis.loading = false;\n\t\t\t\t\t\tthis.playing = true;\n\t\t\t\t\t});\n\t\t\t\t\tthis.currentSound = sound;\n\t\t\t\t},\n\t\t\t\ttogglePlayPause() {\n\t\t\t\t\tif (this.playing === true) {\n\t\t\t\t\t\tthis.playing = false;\n\t\t\t\t\t\tthis.currentSound?.pause();\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.playing = true;\n\t\t\t\t\t\tthis.currentSound?.play();\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\tnext() {\n\t\t\t\t\tif (this.idx + 1 < this.queue.length) {\n\t\t\t\t\t\tthis.idx += 1;\n\t\t\t\t\t\tthis.play();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}));\n\t\t})\n\n\t\tfunction wait(ms) {\n\t\t\treturn new Promise(r => setTimeout(r, m));\n\t\t}\n\t\t</script></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><script>\n\t\tdocument.addEventListener('alpine:init', () => {\n\t\t\tAlpine.data(\"player\", () => ({\n\t\t\t\tinit() {\n\t\t\t\t\twindow.replaceQueueAndPlayAt = (...params) => this.replaceQueueAndPlayAt(...params);\n\t\t\t\t},\n\t\t\t\tqueue: [],\n\t\t\t\tidx: 0,\n\t\t\t\tcurrentSound: null,\n\t\t\t\tnextSound: null,\n\t\t\t\tvolume: 0.1,\n\t\t\t\tplaying: false,\n\t\t\t\tloading: false,\n\n\t\t\t\treplaceQueueAndPlayAt(queue, idx) {\n\t\t\t\t\tthis.queue = queue;\n\t\t\t\t\tthis.idx = idx;\n\t\t\t\t\tthis.play();\n\t\t\t\t},\n\t\t\t\t// Plays the song at the current position\n\t\t\t\tasync play() {\n\t\t\t\t\tconst songId = this.queue[this.idx].songId;\n\n\t\t\t\t\tif (this.currentSound !== null) {\n\t\t\t\t\t\tthis.currentSound.fade(this.volume, 0.0, 250);\n\t\t\t\t\t\tawait wait(250);\n\t\t\t\t\t\tthis.currentSound.unload();\n\t\t\t\t\t}\n\n\t\t\t\t\tconst sound = new Howl({\n\t\t\t\t\t\tsrc: `https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,\n\t\t\t\t\t\thtml5: true,\n\t\t\t\t\t\tvolume: this.volume,\n\t\t\t\t\t})\n\t\t\t\t\tthis.loading = true;\n\t\t\t\t\tsound.play();\n\t\t\t\t\tlet preloadInterval;\n\t\t\t\t\tsound.once(\"load\", () => {\n\t\t\t\t\t\tconst length = sound.duration();\n\t\t\t\t\t\tconst targetLength = length - 5;\n\t\t\t\t\t\tpreloadInterval = setInterval(() => {\n\t\t\t\t\t\t\tconst pos = sound.seek();\n\t\t\t\t\t\t\tif (pos > targetLength) {\n\t\t\t\t\t\t\t\tthis.preload();\n\t\t\t\t\t\t\t\tclearInterval(preloadInterval);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}, 1000);\n\t\t\t\t\t\tthis.loading = false;\n\t\t\t\t\t\tthis.playing = true;\n\t\t\t\t\t});\n\t\t\t\t\tsound.once(\"end\", () => {\n\t\t\t\t\t\tthis.playing = false;\n\t\t\t\t\t\tthis.next();\n\t\t\t\t\t});\n\t\t\t\t\tthis.currentSound = sound;\n\t\t\t\t},\n\t\t\t\tasync playNext() {\n\t\t\t\t\tthis.currentSound?.unload();\n\t\t\t\t\tthis.nextSound.play();\n\t\t\t\t\tthis.playing = true;\n\t\t\t\t\tthis.currentSound = this.nextSound;\n\t\t\t\t\tthis.nextSound = null;\n\t\t\t\t},\n\t\t\t\ttogglePlayPause() {\n\t\t\t\t\tif (this.playing === true) {\n\t\t\t\t\t\tthis.playing = false;\n\t\t\t\t\t\tthis.currentSound?.pause();\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.playing = true;\n\t\t\t\t\t\tthis.currentSound?.play();\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\tnext() {\n\t\t\t\t\tif (this.idx + 1 < this.queue.length) {\n\t\t\t\t\t\tthis.idx += 1;\n\t\t\t\t\t\tthis.playNext();\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\tpreload() {\n\t\t\t\t\tconsole.log(\"preloading\");\n\t\t\t\t\tif (!(this.idx + 1 < this.queue.length)) {\n\t\t\t\t\t\treturn\n\t\t\t\t\t}\n\n\t\t\t\t\tconst nextSongId = this.queue[this.idx + 1].songId;\n\t\t\t\t\tconst nextSound = new Howl({\n\t\t\t\t\t\tsrc: `https://navidrome.araozu.dev/rest/stream.view?id=${nextSongId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,\n\t\t\t\t\t\thtml5: true,\n\t\t\t\t\t\tvolume: 0,\n\t\t\t\t\t\tpreload: true,\n\t\t\t\t\t});\n\t\t\t\t\t// Attempt to play immediately the song, immediately pause it, rewind it and set volume back up\n\t\t\t\t\tnextSound.play();\n\n\t\t\t\t\tlet preloadInterval;\n\t\t\t\t\tnextSound.once(\"load\", () => {\n\t\t\t\t\t\tnextSound.pause();\n\t\t\t\t\t\tnextSound.seek(0);\n\t\t\t\t\t\tnextSound.volume(this.volume);\n\n\t\t\t\t\t\tconst length = nextSound.duration();\n\t\t\t\t\t\tconst targetLength = length - 5;\n\t\t\t\t\t\tpreloadInterval = setInterval(() => {\n\t\t\t\t\t\t\tconst pos = nextSound.seek();\n\t\t\t\t\t\t\tif (pos > targetLength) {\n\t\t\t\t\t\t\t\tthis.preload();\n\t\t\t\t\t\t\t\tclearInterval(preloadInterval);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}, 1000);\n\t\t\t\t\t\tthis.loading = false;\n\t\t\t\t\t\tthis.playing = true;\n\t\t\t\t\t});\n\t\t\t\t\tnextSound.once(\"end\", () => {\n\t\t\t\t\t\tthis.playing = false;\n\t\t\t\t\t\tthis.next();\n\t\t\t\t\t});\n\t\t\t\t\tthis.nextSound = nextSound;\n\t\t\t\t}\n\t\t\t}));\n\t\t})\n\n\t\tfunction wait(ms) {\n\t\t\treturn new Promise(r => setTimeout(r, ms));\n\t\t}\n\t\t</script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -128,7 +128,7 @@ func playIcon(size int) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 140, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 203, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -141,7 +141,7 @@ func playIcon(size int) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 141, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 204, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -183,7 +183,7 @@ func pauseIcon(size int) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 161, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 224, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -196,7 +196,7 @@ func pauseIcon(size int) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 162, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 225, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -238,7 +238,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 170, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 233, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -251,7 +251,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 170, Col: 97}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 233, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -293,7 +293,7 @@ func circleNotchIcon(size int) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 184, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 247, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -306,7 +306,7 @@ func circleNotchIcon(size int) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 185, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 248, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
