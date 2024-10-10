@@ -92,7 +92,7 @@ func MusicPlayer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><script type=\"text/hyperscript\">\n\t\tdef replaceQueueAndPlayAt(queue, pos)\n\t\t\tset $queue to queue\n\t\t\tif pos < queue.length\n\t\t\t\tplayAt(pos)\n\t\t\tend\n\t\tend\n\n\t\tdef playAt(pos)\n\t\t\tset $queueIdx to pos\n\t\t\tset song to $queue[pos]\n\t\t\tplaySong(song.title, song.artist, song.albumId, song.songId)\n\t\tend\n\n\t\tdef playNext()\n\t\t\tif $queueIdx + 1 < $queue.length\n\t\t\t\tplayAt($queueIdx + 1)\n\t\t\tend\n\t\tend\n\n\t\tdef updateNextButton()\n\t\t\tif $queueIdx is $queue.length -1\n\t\t\t\tset #next-button's @disabled to \"true\"\n\t\t\telse\n\t\t\t\tremove @disabled from #next-button\n\t\t\tend\n\t\tend\n\n\t\tdef playSong(title, artist, albumId, songId)\n\t\t\tset #music-player-img's @src to \"/covers/\" + albumId\n\t\t\tput title into #music-player-title's innerHTML\n\t\t\tput artist into #music-player-artist's innerHTML\n\n\t\t\t-- Update icons\n\t\t\tset $playing to true\n\t\t\tremove .hidden from #spinner\n\t\t\tupdateUi(false)\n\t\t\tupdateNextButton()\n\n\t\t\tif $sound exists\n\t\t\t\t$sound.fade($volume, 0.0, 250)\n\t\t\t\twait 250ms\n\t\t\t\t$sound.unload()\n\t\t\tend\n\n\t\t\tmake a Howl from {\n\t\t\t\tsrc: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],\n\t\t\t\thtml5: true,\n\t\t\t\tvolume: $volume\n\t\t\t} called $sound\n\t\t\t$sound.play()\n\t\t\t$sound.once(\"load\", onSongLoaded)\n\t\t\tjs $sound.once(\"end\", () => onSongEnd())\n\t\tend\n\n\t\tdef onSongLoaded()\n\t\t\tadd .hidden to #spinner\n\t\t\tupdateUi(true)\n\t\tend\n\n\t\tdef onSongEnd()\n\t\t\tset $playing to false\n\t\t\tupdateUi(false)\n\t\tend\n\n\t\tdef updateUi(playing)\n\t\t\tif playing is true\n\t\t\t\tadd .hidden to #play-icon\n\t\t\t\tremove .hidden from #pause-icon\n\t\t\telse\n\t\t\t\tremove .hidden from #play-icon\n\t\t\t\tadd .hidden to #pause-icon\n\t\t\tend\n\t\tend\n\n\t\tdef togglePlaying()\n\t\t\tif $playing is true\n\t\t\t\tset $playing to false\n\t\t\t\tupdateUi(false)\n\t\t\t\t$sound.pause()\n\t\t\telse\n\t\t\t\tset $playing to true\n\t\t\t\tupdateUi(true)\n\t\t\t\t$sound.play()\n\t\t\tend\n\t\tend\n\t</script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><script type=\"text/hyperscript\">\n\t\tdef replaceQueueAndPlayAt(queue, pos)\n\t\t\tset $queue to queue\n\t\t\tif pos < queue.length\n\t\t\t\tplayAt(pos)\n\t\t\tend\n\t\tend\n\n\t\tdef playAt(pos)\n\t\t\tset $queueIdx to pos\n\t\t\tset song to $queue[pos]\n\t\t\tplaySong(song.title, song.artist, song.albumId, song.songId)\n\t\tend\n\n\t\tdef playNext()\n\t\t\tif $queueIdx + 1 < $queue.length\n\t\t\t\tplayAt($queueIdx + 1)\n\t\t\tend\n\t\tend\n\n\t\tdef updateNextButton()\n\t\t\tif $queueIdx is $queue.length -1\n\t\t\t\tset #next-button's @disabled to \"true\"\n\t\t\telse\n\t\t\t\tremove @disabled from #next-button\n\t\t\tend\n\t\tend\n\n\t\tdef playSong(title, artist, albumId, songId)\n\t\t\tset #music-player-img's @src to \"/covers/\" + albumId\n\t\t\tput title into #music-player-title's innerHTML\n\t\t\tput artist into #music-player-artist's innerHTML\n\n\t\t\t-- Update icons\n\t\t\tset $playing to true\n\t\t\tremove .hidden from #spinner\n\t\t\tupdateUi(false)\n\t\t\tupdateNextButton()\n\n\t\t\tif $sound exists\n\t\t\t\t$sound.fade($volume, 0.0, 250)\n\t\t\t\twait 250ms\n\t\t\t\t$sound.unload()\n\t\t\tend\n\n\t\t\tmake a Howl from {\n\t\t\t\tsrc: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],\n\t\t\t\thtml5: true,\n\t\t\t\tvolume: $volume\n\t\t\t} called $sound\n\t\t\t$sound.play()\n\t\t\t$sound.once(\"load\", onSongLoaded)\n\t\t\tjs $sound.once(\"end\", () => onSongEnd())\n\t\tend\n\n\t\tdef onSongLoaded()\n\t\t\tadd .hidden to #spinner\n\t\t\tupdateUi(true)\n\t\tend\n\n\t\tdef onSongEnd()\n\t\t\tset $playing to false\n\t\t\tset $sound to null\n\t\t\tif $queueIdx is not $queue.length -1\n\t\t\t\tplayNext()\n\t\t\telse\n\t\t\t\tupdateUi(false)\n\t\t\tend\n\t\tend\n\n\t\tdef updateUi(playing)\n\t\t\tif playing is true\n\t\t\t\tadd .hidden to #play-icon\n\t\t\t\tremove .hidden from #pause-icon\n\t\t\telse\n\t\t\t\tremove .hidden from #play-icon\n\t\t\t\tadd .hidden to #pause-icon\n\t\t\tend\n\t\tend\n\n\t\tdef togglePlaying()\n\t\t\tif $playing is true\n\t\t\t\tset $playing to false\n\t\t\t\tupdateUi(false)\n\t\t\t\t$sound.pause()\n\t\t\telse\n\t\t\t\tset $playing to true\n\t\t\t\tupdateUi(true)\n\t\t\t\t$sound.play()\n\t\t\tend\n\t\tend\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -128,7 +128,7 @@ func playIcon(size int) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 151, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 156, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -141,7 +141,7 @@ func playIcon(size int) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 152, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 157, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -183,7 +183,7 @@ func pauseIcon(size int) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 171, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 176, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -196,7 +196,7 @@ func pauseIcon(size int) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 172, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 177, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -238,7 +238,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 179, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 184, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -251,7 +251,7 @@ func skipForwardIcon(size int) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 179, Col: 97}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 184, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -298,7 +298,7 @@ func circleNotchIcon(class string, size int) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 192, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 197, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
@@ -311,7 +311,7 @@ func circleNotchIcon(class string, size int) templ.Component {
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(size))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 193, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/utils/utils.templ`, Line: 198, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {

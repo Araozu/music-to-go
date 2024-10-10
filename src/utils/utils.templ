@@ -117,7 +117,12 @@ templ MusicPlayer() {
 
 		def onSongEnd()
 			set $playing to false
-			updateUi(false)
+			set $sound to null
+			if $queueIdx is not $queue.length -1
+				playNext()
+			else
+				updateUi(false)
+			end
 		end
 
 		def updateUi(playing)
