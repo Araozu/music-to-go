@@ -24,9 +24,12 @@ templ allAlbumsTempl(albums []utils.Album) {
 }
 
 // Renders the page of a single Album
-templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
+templ albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJson string) {
 	@utils.SkeletonTempl() {
-		<div class="text-center">
+		<div
+			class="text-center"
+			_={ fmt.Sprintf("init set $songsJson to %s", songsJson) }
+		>
 			<img class="inline-block mt-2 rounded shadow" src={ fmt.Sprintf("/covers/%s", albumId) }/>
 			<h1 class="font-bold pt-4 pb-2 text-2xl">
 				{ album.Name }
@@ -35,15 +38,10 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song) {
 				{ album.Artist }
 			</p>
 			<div>
-				for _, song := range songs {
+				for i, song := range songs {
 					<button
 						class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 whitespace-nowrap overflow-hidden overflow-ellipsis"
-						_={ fmt.Sprintf("on click playSong('%s', '%s', '%s', '%s')", 
-							utils.EscapeSingle(song.Title),
-							utils.EscapeSingle(song.Artist),
-							albumId,
-							song.ID,
-						) }
+						_={ fmt.Sprintf("on click replaceQueueAndPlayAt($songsJson, %d)", i) }
 					>
 						<span class="inline-block w-6 text-right opacity-75 pr-2">
 							{ strconv.Itoa(song.TrackNumber) }

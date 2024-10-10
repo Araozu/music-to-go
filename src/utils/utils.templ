@@ -30,7 +30,7 @@ templ MusicPlayer() {
 	<div
 		id="music-player"
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
-		_="init set $sound to null then set $playing to false then set $volume to 0.1"
+		_="init set $sound to null then set $playing to false then set $volume to 0.1 then set $queue to [] then set $queueIdx to 0"
 	>
 		<div class="h-12 bg-sky-200 rounded">
 			<img class="rounded" id="music-player-img"/>
@@ -47,14 +47,40 @@ templ MusicPlayer() {
 			@playIcon(26)
 			@pauseIcon(26)
 		</div>
-		<button class="flex items-center justify-center">
+		<button
+			id="next-button"
+			class="flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+			_="on click playNext()"
+		>
 			@skipForwardIcon(24)
 		</button>
 	</div>
 	<script type="text/hyperscript">
-		def onSongEnd()
-			set $playing to false
-			updateUi(false)
+		def replaceQueueAndPlayAt(queue, pos)
+			set $queue to queue
+			if pos < queue.length
+				playAt(pos)
+			end
+		end
+
+		def playAt(pos)
+			set $queueIdx to pos
+			set song to $queue[pos]
+			playSong(song.title, song.artist, song.albumId, song.songId)
+		end
+
+		def playNext()
+			if $queueIdx + 1 < $queue.length
+				playAt($queueIdx + 1)
+			end
+		end
+
+		def updateNextButton()
+			if $queueIdx is $queue.length -1
+				set #next-button's @disabled to "true"
+			else
+				remove @disabled from #next-button
+			end
 		end
 
 		def playSong(title, artist, albumId, songId)
@@ -66,6 +92,7 @@ templ MusicPlayer() {
 			set $playing to true
 			remove .hidden from #spinner
 			updateUi(false)
+			updateNextButton()
 
 			if $sound exists
 				$sound.fade($volume, 0.0, 250)
@@ -86,6 +113,11 @@ templ MusicPlayer() {
 		def onSongLoaded()
 			add .hidden to #spinner
 			updateUi(true)
+		end
+
+		def onSongEnd()
+			set $playing to false
+			updateUi(false)
 		end
 
 		def updateUi(playing)

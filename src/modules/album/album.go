@@ -3,12 +3,20 @@ package album
 import (
 	"acide/src/modules/song"
 	"acide/src/utils"
+	"encoding/json"
 	"net/http"
 	"sync"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 )
+
+type ClientSong struct {
+	Title   string `json:"title"`
+	Artist  string `json:"artist"`
+	AlbumId string `json:"albumId"`
+	SongId  string `json:"songId"`
+}
 
 func Setup(g *echo.Group) {
 	log.Print("Setting up the album module")
@@ -68,5 +76,21 @@ func albumPage(c echo.Context) error {
 		return routineErr
 	}
 
-	return utils.RenderTempl(c, http.StatusOK, albumTempl(albumId, album, songs))
+	// convert the song list to json
+	clientSons := make([]ClientSong, len(songs))
+	for i, song := range songs {
+		clientSons[i] = ClientSong{
+			Title:   song.Title,
+			Artist:  song.Artist,
+			AlbumId: album.ID,
+			SongId:  song.ID,
+		}
+	}
+	clientSongsJson, err := json.Marshal(clientSons)
+	if err != nil {
+		log.Printf("Error marshaling clientSongs: %s", err)
+		return err
+	}
+
+	return utils.RenderTempl(c, http.StatusOK, albumTempl(albumId, album, songs, string(clientSongsJson)))
 }
