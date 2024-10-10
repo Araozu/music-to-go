@@ -16,6 +16,7 @@ templ SkeletonTempl() {
 			<script src="/public/js/htmx.min.js" defer></script>
 			<script src="/public/js/_hyperscript.min.js" defer></script>
 			<script src="/public/js/howler.min.js" defer></script>
+			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 			<script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js" defer></script>
 		</head>
 		<body>
@@ -30,123 +31,106 @@ templ MusicPlayer() {
 	<div
 		id="music-player"
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
-		_="init set $sound to null then set $playing to false then set $volume to 0.1 then set $queue to [] then set $queueIdx to 0"
+		x-data="player"
 	>
 		<div class="h-12 bg-sky-200 rounded">
 			<img class="rounded" id="music-player-img"/>
 		</div>
 		<div class="w-full overflow-hidden">
-			<p id="music-player-title" class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
-			<p id="music-player-artist" class="text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full">-</p>
+			<p
+				id="music-player-title"
+				class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full"
+				x-text="queue[idx]?.title ?? '-'"
+			>
+				-
+			</p>
+			<p
+				id="music-player-artist"
+				class="text-sm opacity-75 overflow-hidden overflow-ellipsis whitespace-nowrap w-full"
+				x-text="queue[idx]?.artist ?? '-'"
+			>
+				-
+			</p>
 		</div>
 		<div
 			class="flex items-center justify-center cursor-pointer relative"
-			_="on click togglePlaying()"
+			@click="togglePlayPause"
 		>
-			@circleNotchIcon("hidden absolute animate-spin", 48)
+			@circleNotchIcon(48)
 			@playIcon(26)
 			@pauseIcon(26)
 		</div>
 		<button
 			id="next-button"
 			class="flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-			_="on click playNext()"
+			@click="next"
+			:disabled="idx + 1 >= queue.length? true: false"
 		>
 			@skipForwardIcon(24)
 		</button>
+		<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.data("player", () => ({
+				init() {
+					window.replaceQueueAndPlayAt = (...params) => this.replaceQueueAndPlayAt(...params);
+				},
+				queue: [],
+				idx: 0,
+				currentSound: null,
+				volume: 0.1,
+				playing: false,
+				loading: false,
+
+				replaceQueueAndPlayAt(queue, idx) {
+					this.queue = queue;
+					this.idx = idx;
+					this.play();
+				},
+				async play() {
+					const songId = this.queue[this.idx].songId;
+
+					if (this.currentSound !== null) {
+						this.currentSound.fade(this.volume, 0.0, 250);
+						await wait(250);
+						this.currentSound.unload();
+					}
+
+					const sound = new Howl({
+						src: `https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,
+						html5: true,
+						volume: this.volume,
+					})
+					this.loading = true;
+					sound.play();
+					sound.once("load", () => {
+						this.loading = false;
+						this.playing = true;
+					});
+					this.currentSound = sound;
+				},
+				togglePlayPause() {
+					if (this.playing === true) {
+						this.playing = false;
+						this.currentSound?.pause();
+					} else {
+						this.playing = true;
+						this.currentSound?.play();
+					}
+				},
+				next() {
+					if (this.idx + 1 < this.queue.length) {
+						this.idx += 1;
+						this.play();
+					}
+				}
+			}));
+		})
+
+		function wait(ms) {
+			return new Promise(r => setTimeout(r, m));
+		}
+		</script>
 	</div>
-	<script type="text/hyperscript">
-		def replaceQueueAndPlayAt(queue, pos)
-			set $queue to queue
-			if pos < queue.length
-				playAt(pos)
-			end
-		end
-
-		def playAt(pos)
-			set $queueIdx to pos
-			set song to $queue[pos]
-			playSong(song.title, song.artist, song.albumId, song.songId)
-		end
-
-		def playNext()
-			if $queueIdx + 1 < $queue.length
-				playAt($queueIdx + 1)
-			end
-		end
-
-		def updateNextButton()
-			if $queueIdx is $queue.length -1
-				set #next-button's @disabled to "true"
-			else
-				remove @disabled from #next-button
-			end
-		end
-
-		def playSong(title, artist, albumId, songId)
-			set #music-player-img's @src to "/covers/" + albumId
-			put title into #music-player-title's innerHTML
-			put artist into #music-player-artist's innerHTML
-
-			-- Update icons
-			set $playing to true
-			remove .hidden from #spinner
-			updateUi(false)
-			updateNextButton()
-
-			if $sound exists
-				$sound.fade($volume, 0.0, 250)
-				wait 250ms
-				$sound.unload()
-			end
-
-			make a Howl from {
-				src: [`https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`],
-				html5: true,
-				volume: $volume
-			} called $sound
-			$sound.play()
-			$sound.once("load", onSongLoaded)
-			js $sound.once("end", () => onSongEnd())
-		end
-
-		def onSongLoaded()
-			add .hidden to #spinner
-			updateUi(true)
-		end
-
-		def onSongEnd()
-			set $playing to false
-			set $sound to null
-			if $queueIdx is not $queue.length -1
-				playNext()
-			else
-				updateUi(false)
-			end
-		end
-
-		def updateUi(playing)
-			if playing is true
-				add .hidden to #play-icon
-				remove .hidden from #pause-icon
-			else
-				remove .hidden from #play-icon
-				add .hidden to #pause-icon
-			end
-		end
-
-		def togglePlaying()
-			if $playing is true
-				set $playing to false
-				updateUi(false)
-				$sound.pause()
-			else
-				set $playing to true
-				updateUi(true)
-				$sound.play()
-			end
-		end
-	</script>
 }
 
 templ playIcon(size int) {
@@ -159,6 +143,7 @@ templ playIcon(size int) {
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
+		:style="{display: playing? 'none': 'inline-block'}"
 	>
 		<path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"></path>
 	</svg>
@@ -175,6 +160,7 @@ templ pauseIcon(size int) {
 		class="hidden"
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
+		:style="{display: playing? 'inline-block': 'none'}"
 	>
 		<path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"></path>
 	</svg>
@@ -186,9 +172,10 @@ templ skipForwardIcon(size int) {
 	</svg>
 }
 
-templ circleNotchIcon(class string, size int) {
+templ circleNotchIcon(size int) {
 	<svg
 		id="spinner"
+		:style="{display: loading? 'inline-block': 'none'}"
 		xmlns="http://www.w3.org/2000/svg"
 		fill="#000000"
 		viewBox="0 0 256 256"
@@ -196,7 +183,7 @@ templ circleNotchIcon(class string, size int) {
 		data-darkreader-inline-fill=""
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
-		class={ class }
+		class="absolute animate-spin"
 	>
 		<path d="M232,128a104,104,0,0,1-208,0c0-41,23.81-78.36,60.66-95.27a8,8,0,0,1,6.68,14.54C60.15,61.59,40,93.27,40,128a88,88,0,0,0,176,0c0-34.73-20.15-66.41-51.34-80.73a8,8,0,0,1,6.68-14.54C208.19,49.64,232,87,232,128Z"></path>
 	</svg>
