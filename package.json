@@ -6,7 +6,7 @@
   "scripts": {
     "air": "air",
     "build": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify",
-    "dev": "concurrently 'air' 'tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch' 'templ generate --watch'",
+    "dev": "concurrently -c green,cyan,yellow 'air' 'tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch' 'templ generate --watch'",
     "tailwind:watch": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
     "tailwind:build": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify",
     "temple:watch": "templ generate --watch"

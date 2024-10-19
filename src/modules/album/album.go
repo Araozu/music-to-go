@@ -27,14 +27,36 @@ func Setup(g *echo.Group) {
 }
 
 func allAlbumsPage(c echo.Context) error {
+	// if there's a search query, do that
+	searchQuery := c.QueryParam("s")
+	isHtmxRequest := c.Request().Header.Get("HX-Request") == "true"
+
 	// get the first 10 albums
 	token, server := utils.Credentials(c)
-	albums, err := loadAlbums(token, server, 0, 30)
+
+	var (
+		albums []utils.Album
+		err    error
+	)
+	if searchQuery != "" {
+		// search for the requested albums
+		albums, err = searchAlbums(token, searchQuery, server, 0, 20)
+	} else {
+		// get 10 random albums
+		albums, err = loadAlbums(token, server, 0, 30)
+	}
+
 	if err != nil {
 		return err
 	}
 
-	return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl(albums))
+	if isHtmxRequest {
+		// return just a fragment
+		return utils.RenderTempl(c, http.StatusOK, albumsFragment(albums))
+	} else {
+		// return a full-blown html page
+		return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl(albums))
+	}
 }
 
 func albumPage(c echo.Context) error {

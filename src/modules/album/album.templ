@@ -14,12 +14,39 @@ templ allAlbumsTempl(albums []utils.Album) {
 			<h1 class="font-bold pt-4 pb-2 text-2xl">
 				Albums
 			</h1>
-			<div class="grid grid-cols-3 gap-2">
+			<div class="px-2">
+				<input
+					class="inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600"
+					placeholder="Search albums"
+					name="s"
+					hx-get="/album/"
+					hx-trigger="keyup changed delay:500ms"
+					hx-target="#album-list"
+				/>
+			</div>
+			<br/>
+			<div id="album-list" class="grid grid-cols-3 gap-2">
 				for _, album := range albums {
 					@index.AlbumCard(album)
 				}
+				if len(albums) == 0 {
+					<p>
+						No albums found
+					</p>
+				}
 			</div>
 		</div>
+	}
+}
+
+templ albumsFragment(albums []utils.Album) {
+	for _, album := range albums {
+		@index.AlbumCard(album)
+	}
+	if len(albums) == 0 {
+		<p>
+			No albums found
+		</p>
 	}
 }
 

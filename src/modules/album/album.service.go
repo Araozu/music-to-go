@@ -4,9 +4,34 @@ import (
 	"acide/src/utils"
 	"errors"
 	"fmt"
+	"net/url"
 
 	"github.com/go-resty/resty/v2"
 )
+
+func searchAlbums(token, query, server string, start, end int) ([]utils.Album, error) {
+	var albums []utils.Album
+	var error utils.NavError
+
+	encodedQuery := url.QueryEscape(query)
+
+	client := resty.New()
+	response, err := client.R().
+		SetHeader("x-nd-authorization", fmt.Sprintf("Bearer %s", token)).
+		SetResult(&albums).
+		SetError(&error).
+		Get(fmt.Sprintf("%s/api/album?_start=%d&_end=%d&_sort=name&_order=ASC&name=%s", server, start, end, encodedQuery))
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !response.IsSuccess() {
+		return nil, errors.New(error.Error)
+	}
+
+	return albums, nil
+}
 
 func loadAlbums(token, server string, start, end int) ([]utils.Album, error) {
 	var albums []utils.Album
