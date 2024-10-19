@@ -15,6 +15,7 @@ type ClientSong struct {
 	Title   string `json:"title"`
 	Artist  string `json:"artist"`
 	AlbumId string `json:"albumId"`
+	Album   string `json:"album"`
 	SongId  string `json:"songId"`
 }
 
@@ -30,21 +31,10 @@ func allAlbumsPage(c echo.Context) error {
 	// if there's a search query, do that
 	searchQuery := c.QueryParam("s")
 	isHtmxRequest := c.Request().Header.Get("HX-Request") == "true"
-
-	// get the first 10 albums
 	token, server := utils.Credentials(c)
 
-	var (
-		albums []utils.Album
-		err    error
-	)
-	if searchQuery != "" {
-		// search for the requested albums
-		albums, err = searchAlbums(token, searchQuery, server, 0, 20)
-	} else {
-		// get 10 random albums
-		albums, err = loadAlbums(token, server, 0, 30)
-	}
+	// if searchQuery is empty, this will get the first 30 albums
+	albums, err := searchAlbums(token, searchQuery, server, 0, 30)
 
 	if err != nil {
 		return err
@@ -105,6 +95,7 @@ func albumPage(c echo.Context) error {
 			Title:   song.Title,
 			Artist:  song.Artist,
 			AlbumId: album.ID,
+			Album:   album.Name,
 			SongId:  song.ID,
 		}
 	}

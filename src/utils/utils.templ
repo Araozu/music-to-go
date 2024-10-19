@@ -33,10 +33,16 @@ templ MusicPlayer() {
 		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
 		x-data="player"
 	>
-		<div class="h-12 bg-sky-200 rounded">
+		<div
+			class="h-12 bg-sky-200 rounded"
+			_="on click toggle .hidden on #full-music-player"
+		>
 			<img class="rounded" id="music-player-img" :src="queue[idx]? `/covers/${queue[idx]?.albumId}` : ''"/>
 		</div>
-		<div class="w-full overflow-hidden">
+		<div
+			class="w-full overflow-hidden"
+			_="on click toggle .hidden on #full-music-player"
+		>
 			<p
 				id="music-player-title"
 				class="overflow-hidden overflow-ellipsis whitespace-nowrap w-full"
@@ -68,6 +74,7 @@ templ MusicPlayer() {
 		>
 			@skipForwardIcon(24)
 		</button>
+		@fullMusicPlayer()
 		<script>
 		document.addEventListener('alpine:init', () => {
 			Alpine.data("player", () => ({
@@ -196,6 +203,46 @@ templ MusicPlayer() {
 	</div>
 }
 
+templ fullMusicPlayer() {
+	<div id="full-music-player" class="fixed top-0 left-0 w-screen h-screen bg-white hidden">
+		<div class="flex justify-center py-6">
+			<div class="bg-sky-200 rounded w-[20rem] h-[20rem]">
+				<img
+					class="rounded inline-block w-full"
+					id="full-music-player-img"
+					:src="queue[idx]? `/covers/${queue[idx]?.albumId}` : ''"
+				/>
+			</div>
+		</div>
+		<div class="text-center">
+			<div
+				class="font-bold text-2xl"
+				x-text="queue[idx]?.title ?? '-'"
+			></div>
+			<div
+				class="text-lg"
+				x-text="queue[idx]?.album ?? '-'"
+			></div>
+			<div
+				class="text-sm opacity-75"
+				x-text="queue[idx]?.artist ?? '-'"
+			></div>
+		</div>
+		<div class="absolute bottom-0 w-full grid grid-cols-2 bg-sky-50">
+			<button type="button" class="inline-block text-center py-4">
+				@playlistIcon(24)
+			</button>
+			<button
+				type="button"
+				class="inline-block text-center py-4"
+				_="on click toggle .hidden on #full-music-player"
+			>
+				@caretDoubleDownIcon(24)
+			</button>
+		</div>
+	</div>
+}
+
 templ playIcon(size int) {
 	<svg
 		id="play-icon"
@@ -249,5 +296,35 @@ templ circleNotchIcon(size int) {
 		class="absolute animate-spin"
 	>
 		<path d="M232,128a104,104,0,0,1-208,0c0-41,23.81-78.36,60.66-95.27a8,8,0,0,1,6.68,14.54C60.15,61.59,40,93.27,40,128a88,88,0,0,0,176,0c0-34.73-20.15-66.41-51.34-80.73a8,8,0,0,1,6.68-14.54C208.19,49.64,232,87,232,128Z"></path>
+	</svg>
+}
+
+templ playlistIcon(size int) {
+	<svg
+		class="inline-block"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="#000000"
+		viewBox="0 0 256 256"
+		style="--darkreader-inline-fill: #000000;"
+		data-darkreader-inline-fill=""
+		width={ strconv.Itoa(size) }
+		height={ strconv.Itoa(size) }
+	>
+		<path d="M32,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H40A8,8,0,0,1,32,64Zm8,72H160a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16Zm72,48H40a8,8,0,0,0,0,16h72a8,8,0,0,0,0-16Zm135.66-57.7a8,8,0,0,1-10,5.36L208,122.75V192a32.05,32.05,0,1,1-16-27.69V112a8,8,0,0,1,10.3-7.66l40,12A8,8,0,0,1,247.66,126.3ZM192,192a16,16,0,1,0-16,16A16,16,0,0,0,192,192Z"></path>
+	</svg>
+}
+
+templ caretDoubleDownIcon(size int) {
+	<svg
+		class="inline-block"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="#000000"
+		viewBox="0 0 256 256"
+		style="--darkreader-inline-fill: #000000;"
+		data-darkreader-inline-fill=""
+		width={ strconv.Itoa(size) }
+		height={ strconv.Itoa(size) }
+	>
+		<path d="M213.66,130.34a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32,0l-80-80a8,8,0,0,1,11.32-11.32L128,204.69l74.34-74.35A8,8,0,0,1,213.66,130.34Zm-91.32,11.32a8,8,0,0,0,11.32,0l80-80a8,8,0,0,0-11.32-11.32L128,124.69,53.66,50.34A8,8,0,0,0,42.34,61.66Z"></path>
 	</svg>
 }
