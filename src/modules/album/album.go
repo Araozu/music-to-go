@@ -3,6 +3,7 @@ package album
 import (
 	"acide/src/modules/song"
 	"acide/src/utils"
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"sync"
@@ -89,9 +90,9 @@ func albumPage(c echo.Context) error {
 	}
 
 	// convert the song list to json
-	clientSons := make([]ClientSong, len(songs))
+	clientSongs := make([]ClientSong, len(songs))
 	for i, song := range songs {
-		clientSons[i] = ClientSong{
+		clientSongs[i] = ClientSong{
 			Title:   song.Title,
 			Artist:  song.Artist,
 			AlbumId: album.ID,
@@ -99,11 +100,15 @@ func albumPage(c echo.Context) error {
 			SongId:  song.ID,
 		}
 	}
-	clientSongsJson, err := json.Marshal(clientSons)
-	if err != nil {
+
+	var buff bytes.Buffer
+	enc := json.NewEncoder(&buff)
+	enc.SetEscapeHTML(false)
+	if err := enc.Encode(&clientSongs); err != nil {
 		log.Printf("Error marshaling clientSongs: %s", err)
 		return err
 	}
+	clientSongsJson := buff.String()
 
 	return utils.RenderTempl(c, http.StatusOK, albumTempl(albumId, album, songs, string(clientSongsJson)))
 }

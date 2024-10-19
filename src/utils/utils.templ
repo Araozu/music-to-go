@@ -88,33 +88,73 @@ templ MusicPlayer() {
 				volume: 0.1,
 				playing: false,
 				loading: false,
+				progress: 0,
 
+				// sets the queue, and plays the song at idx
 				replaceQueueAndPlayAt(queue, idx) {
 					this.queue = queue;
 					this.idx = idx;
-					this.play();
-				},
-				// Plays the song at the current position
-				async play() {
-					const songId = this.queue[this.idx].songId;
+					this.play(idx);
 
-					if (this.currentSound !== null) {
+					// setup the preload and progress listener
+					setInterval(() => this.checkDuration(), 1000);
+				},
+
+				// Plays the song at the passed idx, sets this.idx to that,
+				// and plays a preloaded song
+				// 
+				// If preloaded=true, this function will assume that it is the
+				// next song. It will trust that idx is correct.
+				async play(idx) {
+					const preloaded = this.nextSound !== null && idx === this.idx + 1;
+
+					// if a song is currently playing
+					// then fade it out before playing the next sound
+					if (this.playing === true 
+						&& this.currentSound !== null 
+					) {
+						// this will not trigger when next() is called,
+						// because next() sets this.playing=false
+
 						this.currentSound.fade(this.volume, 0.0, 250);
 						await wait(250);
-						this.currentSound.unload();
 					}
 
-					const sound = new Howl({
-						src: `https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,
-						html5: true,
-						volume: this.volume,
-					})
-					this.loading = true;
-					sound.play();
-					let preloadInterval;
-					sound.once("load", () => {
+					this.currentSound?.unload?.();
+					this.playing = false;
+					this.currentSound = null;
+					this.idx = idx;
+
+					// if a song is preloaded, assume it's the next song and play it
+					if (preloaded === true && this.nextSound !== null) {
+						this.currentSound = this.nextSound;
+						this.nextSound = null;
+						this.currentSound.play();
+						this.playing = true;
+					} else {
+						// otherwise, load the song at idx and play it
+						const songId = this.queue[idx].songId;
+
+						const sound = new Howl({
+							src: `https://navidrome.araozu.dev/rest/stream.view?id=${songId}&v=1.13.0&c=music-to-go&u=fernando&s=49805d&t=4148cd1c83ae1bd01334facf4e70a947`,
+							html5: true,
+							volume: this.volume,
+						});
+						this.currentSound = sound;
+						this.loading = true;
+						sound.play();
+						sound.once("load", () => {
+							this.loading = false;
+							this.playing = true;
+						});
+					}
+
+					// set-up preloading for the next song
+					const sound = this.currentSound;
+					sound.once("play", () => {
 						const length = sound.duration();
 						const targetLength = length - 5;
+						let preloadInterval;
 						preloadInterval = setInterval(() => {
 							const pos = sound.seek();
 							if (pos > targetLength) {
@@ -122,22 +162,37 @@ templ MusicPlayer() {
 								clearInterval(preloadInterval);
 							}
 						}, 1000);
-						this.loading = false;
-						this.playing = true;
 					});
+
+					// set-up playing the next song when the current finishes
 					sound.once("end", () => {
 						this.playing = false;
 						this.next();
 					});
 					this.currentSound = sound;
 				},
-				async playNext() {
-					this.currentSound?.unload();
-					this.nextSound.play();
-					this.playing = true;
-					this.currentSound = this.nextSound;
-					this.nextSound = null;
+
+				// checks the duration of the playing song and:
+				// - updates the song progress (0-100%)
+				// - begins preloading
+				checkDuration() {
+					const sound = this.currentSound;
+					if (this.playing) {
+						const length = sound.duration();
+						if (length <= 0) return;
+
+						const position = sound.seek();
+
+						// preload 5s before the song ends
+						if (position >= length - 5 && this.nextSound === null) {
+							this.preload();
+						}
+
+						// update the song progress percentage
+						this.progress = Math.floor((position * 100) / length);
+					}
 				},
+
 				togglePlayPause() {
 					if (this.playing === true) {
 						this.playing = false;
@@ -149,8 +204,7 @@ templ MusicPlayer() {
 				},
 				next() {
 					if (this.idx + 1 < this.queue.length) {
-						this.idx += 1;
-						this.playNext();
+						this.play(this.idx + 1);
 					}
 				},
 				preload() {
@@ -166,30 +220,13 @@ templ MusicPlayer() {
 						volume: 0,
 						preload: true,
 					});
-					// Attempt to play immediately the song, immediately pause it, rewind it and set volume back up
+					// Attempt to immediately play the song, immediately pause it, rewind it and set volume back up
 					nextSound.play();
-
 					let preloadInterval;
 					nextSound.once("load", () => {
 						nextSound.pause();
 						nextSound.seek(0);
 						nextSound.volume(this.volume);
-
-						const length = nextSound.duration();
-						const targetLength = length - 5;
-						preloadInterval = setInterval(() => {
-							const pos = nextSound.seek();
-							if (pos > targetLength) {
-								this.preload();
-								clearInterval(preloadInterval);
-							}
-						}, 1000);
-						this.loading = false;
-						this.playing = true;
-					});
-					nextSound.once("end", () => {
-						this.playing = false;
-						this.next();
 					});
 					this.nextSound = nextSound;
 				}
