@@ -97,6 +97,7 @@ templ MusicPlayer() {
 					this.play(idx);
 
 					// setup the preload and progress listener
+					console.log("setting up listener");
 					setInterval(() => this.checkDuration(), 1000);
 				},
 
@@ -252,6 +253,16 @@ templ fullMusicPlayer() {
 			</div>
 		</div>
 		<div class="text-center">
+			<div class="px-6">
+				<progress
+					class="inline-block w-full"
+					id="song-progress"
+					aria-label="Song progress"
+					min="0"
+					max="100"
+					:value="progress"
+				></progress>
+			</div>
 			<div
 				class="font-bold text-2xl"
 				x-text="queue[idx]?.title ?? '-'"
