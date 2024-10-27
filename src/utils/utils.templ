@@ -34,7 +34,7 @@ templ MusicPlayer() {
 		x-data="player"
 	>
 		<div
-			class="h-12 bg-sky-200 rounded"
+			class="h-12 bg-sky-200 dark:bg-sky-700 rounded"
 			_="on click toggle .hidden on #full-music-player"
 		>
 			<img class="rounded" id="music-player-img" :src="queue[idx]? `/covers/${queue[idx]?.albumId}` : ''"/>
@@ -251,7 +251,7 @@ templ MusicPlayer() {
 templ fullMusicPlayer() {
 	<div id="full-music-player" class="fixed top-0 left-0 w-screen h-screen bg-c-bg text-c-on-bg hidden">
 		<div class="flex justify-center py-6">
-			<div class="bg-sky-200 rounded w-[20rem] h-[20rem]">
+			<div class="bg-sky-200 dark:bg-sky-700 rounded w-[20rem] h-[20rem]">
 				<img
 					class="rounded inline-block w-full"
 					id="full-music-player-img"

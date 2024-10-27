@@ -1,5 +1,5 @@
 # Start with an Alpine base image
-FROM alpine:latest
+FROM debian:latest
 
 # Create a directory for our application
 WORKDIR /app
