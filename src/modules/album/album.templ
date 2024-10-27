@@ -25,7 +25,7 @@ templ allAlbumsTempl(albums []utils.Album) {
 				/>
 			</div>
 			<br/>
-			<div id="album-list" class="grid grid-cols-3 gap-2">
+			<div id="album-list" class="grid grid-cols-3 gap-2 px-2">
 				for _, album := range albums {
 					@index.AlbumCard(album)
 				}
@@ -67,7 +67,7 @@ templ albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJs
 			<div>
 				for i, song := range songs {
 					<button
-						class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 whitespace-nowrap overflow-hidden overflow-ellipsis"
+						class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 hover:dark:bg-sky-950 whitespace-nowrap overflow-hidden overflow-ellipsis transition-colors"
 						_={ fmt.Sprintf("on click replaceQueueAndPlayAt($songsJson, %d)", i) }
 					>
 						<span class="inline-block w-6 text-right opacity-75 pr-2">

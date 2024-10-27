@@ -30,7 +30,7 @@ templ SkeletonTempl() {
 templ MusicPlayer() {
 	<div
 		id="music-player"
-		class="fixed bottom-0 left-0 w-screen border-t border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
+		class="fixed bottom-0 left-0 w-screen border-t bg-c-bg text-c-on-bg border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1 bg-white"
 		x-data="player"
 	>
 		<div
@@ -89,6 +89,7 @@ templ MusicPlayer() {
 				playing: false,
 				loading: false,
 				progress: 0,
+				listenerInterval: 0,
 
 				// sets the queue, and plays the song at idx
 				replaceQueueAndPlayAt(queue, idx) {
@@ -98,7 +99,8 @@ templ MusicPlayer() {
 
 					// setup the preload and progress listener
 					console.log("setting up listener");
-					setInterval(() => this.checkDuration(), 1000);
+					clearInterval(this.listenerInterval);
+					this.listenerInterval = setInterval(() => this.checkDuration(), 1000);
 				},
 
 				// Plays the song at the passed idx, sets this.idx to that,
@@ -247,7 +249,7 @@ templ MusicPlayer() {
 }
 
 templ fullMusicPlayer() {
-	<div id="full-music-player" class="fixed top-0 left-0 w-screen h-screen bg-white hidden">
+	<div id="full-music-player" class="fixed top-0 left-0 w-screen h-screen bg-c-bg text-c-on-bg hidden">
 		<div class="flex justify-center py-6">
 			<div class="bg-sky-200 rounded w-[20rem] h-[20rem]">
 				<img
@@ -294,7 +296,7 @@ templ fullMusicPlayer() {
 				class="flex items-center justify-center cursor-pointer relative px-4"
 				@click="togglePlayPause"
 			>
-				@circleNotchIcon(48)
+				@circleNotchIcon(56)
 				@playIcon(38)
 				@pauseIcon(38)
 			</div>
@@ -307,7 +309,7 @@ templ fullMusicPlayer() {
 				@skipForwardIcon(24)
 			</button>
 		</div>
-		<div class="absolute bottom-0 w-full grid grid-cols-2 bg-sky-50">
+		<div class="absolute bottom-0 w-full grid grid-cols-2 bg-sky-50 dark:bg-sky-950">
 			<button type="button" class="inline-block text-center py-4">
 				@playlistIcon(24)
 			</button>
@@ -328,7 +330,7 @@ templ playIcon(size int) {
 		xmlns="http://www.w3.org/2000/svg"
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -342,7 +344,7 @@ templ pauseIcon(size int) {
 	<svg
 		id="pause-icon"
 		xmlns="http://www.w3.org/2000/svg"
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -360,7 +362,7 @@ templ skipBackwardIcon(size int) {
 		xmlns="http://www.w3.org/2000/svg"
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -374,7 +376,7 @@ templ skipForwardIcon(size int) {
 		xmlns="http://www.w3.org/2000/svg"
 		width={ strconv.Itoa(size) }
 		height={ strconv.Itoa(size) }
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -388,7 +390,7 @@ templ circleNotchIcon(size int) {
 		id="spinner"
 		:style="{display: loading? 'inline-block': 'none'}"
 		xmlns="http://www.w3.org/2000/svg"
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -404,7 +406,7 @@ templ playlistIcon(size int) {
 	<svg
 		class="inline-block"
 		xmlns="http://www.w3.org/2000/svg"
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""
@@ -419,7 +421,7 @@ templ caretDoubleDownIcon(size int) {
 	<svg
 		class="inline-block"
 		xmlns="http://www.w3.org/2000/svg"
-		fill="#000000"
+		fill="var(--c-on-bg)"
 		viewBox="0 0 256 256"
 		style="--darkreader-inline-fill: #000000;"
 		data-darkreader-inline-fill=""

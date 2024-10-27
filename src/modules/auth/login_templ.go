@@ -43,7 +43,7 @@ func LoginTempl() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"bg-sky-500 text-white text-xl font-bold p-2\">music to go</nav><div hx-ext=\"response-targets\">Login to Navidrome:<br><form hx-post=\"/auth/f/login\" hx-swap=\"innerHTML\" hx-target=\"#login-result\" hx-target-400=\"#login-result\" hx-target-500=\"#login-result\"><label for=\"navidrome-url\" class=\"text-sm\">Navidrome URL:</label> <input id=\"navidrome-url\" class=\"w-full py-1 px-2 rounded\" placeholder=\"https://\" name=\"navidrome-url\" required><br><label for=\"username\" class=\"text-sm\">Username:</label> <input id=\"username\" class=\"w-full py-1 px-2 rounded\" placeholder=\"username\" name=\"username\" required><br><label for=\"password\" class=\"text-sm\">Password:</label> <input id=\"password\" class=\"w-full py-1 px-2 rounded\" placeholder=\"password\" name=\"password\" type=\"password\" required><br><button class=\"py-2 px-4 my-2 bg-sky-500 text-white rounded\" type=\"submit\">Log-in</button><br><div id=\"login-result\">Result:</div></form></div>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

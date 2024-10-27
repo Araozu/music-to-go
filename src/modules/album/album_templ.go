@@ -49,7 +49,7 @@ func allAlbumsTempl(albums []utils.Album) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><h1 class=\"font-bold pt-4 pb-2 text-2xl\">Albums</h1><div class=\"px-2\"><input class=\"inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600\" placeholder=\"Search albums\" name=\"s\" hx-get=\"/album/\" hx-trigger=\"keyup changed delay:500ms\" hx-target=\"#album-list\"></div><br><div id=\"album-list\" class=\"grid grid-cols-3 gap-2\">")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -60,12 +60,12 @@ func allAlbumsTempl(albums []utils.Album) templ.Component {
 				}
 			}
 			if len(albums) == 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>No albums found</p>")
+				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -107,7 +107,7 @@ func albumsFragment(albums []utils.Album) templ.Component {
 			}
 		}
 		if len(albums) == 0 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>No albums found</p>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -150,7 +150,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center\" _=\"")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -163,7 +163,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><img class=\"inline-block mt-2 rounded shadow\" src=\"")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 6)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -176,7 +176,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><h1 class=\"font-bold pt-4 pb-2 text-2xl\">")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 7)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -189,7 +189,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><p>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 8)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -202,12 +202,12 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 9)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for i, song := range songs {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 whitespace-nowrap overflow-hidden overflow-ellipsis\" _=\"")
+				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 10)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -220,7 +220,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"inline-block w-6 text-right opacity-75 pr-2\">")
+				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 11)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -233,7 +233,7 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> ")
+				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 12)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -246,12 +246,12 @@ func albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJso
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button>")
+				templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 13)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 14)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

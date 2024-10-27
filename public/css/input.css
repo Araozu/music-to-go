@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --c-bg: #01040a;
+    --c-on-bg: white;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --c-bg: white;
+        --c-on-bg: black;
+    }
+}
+
+html {
+    background-color: var(--c-bg);
+    color: var(--c-on-bg);
+}
+
 body {
     font-family: "Atkinson Hyperlegible", sans-serif;
 }
