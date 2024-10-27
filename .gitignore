@@ -4,4 +4,5 @@ public/css/output.css
 tmp
 main
 src/**/*.txt
+*_templ.go
 
