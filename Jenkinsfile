@@ -9,9 +9,7 @@ pipeline {
 				}
 			}
 			steps {
-				sh 'go mod tidy'
 				sh 'templ generate'
-				sh 'go build main.go'
 			}
 		}
 		stage('Build go binary') {
