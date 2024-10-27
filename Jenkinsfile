@@ -1,10 +1,13 @@
 pipeline {
 	agent any
 	stages {
+		stage('Build templ files') {
+			sh 'docker run -v `pwd`:/app -w=/app ghcr.io/a-h/templ:latest generate'
+		}
 		stage('Build go binary') {
 			agent {
 				docker {
-					image 'golang:latest'
+					image 'golang:1.22-alpine3.20'
 					reuseNode true
 				}
 			}

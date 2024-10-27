@@ -1,7 +1,5 @@
 # Start with an Alpine base image
-FROM debian:latest
-
-RUN apt-get install -y ca-certificates
+FROM alpine:3.20
 
 # Create a directory for our application
 WORKDIR /app
