@@ -10,7 +10,12 @@ templ IndexTempl(albums []utils.Album) {
 		<nav class="text-blue-500 font-bold text-xl py-2 border-b border-blue-500">
 			music to go
 		</nav>
-		<h2 class="font-bold text-xl px-2 pt-4">
+		<div class="grid grid-cols-2 gap-4 px-2 pt-2">
+			<a href="/album/" class="inline-block p-2 bg-sky-400 dark:bg-sky-700 rounded">
+				Albums
+			</a>
+		</div>
+		<h2 class="font-bold text-xl px-2 pt-2">
 			Random Albums
 		</h2>
 		<div class="overflow-x-scroll whitespace-nowrap py-2 flex gap-2 px-2">
