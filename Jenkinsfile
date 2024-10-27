@@ -2,7 +2,9 @@ pipeline {
 	agent any
 	stages {
 		stage('Build templ files') {
-			sh 'docker run -v `pwd`:/app -w=/app ghcr.io/a-h/templ:latest generate'
+			steps {
+				sh 'docker run -v `pwd`:/app -w=/app ghcr.io/a-h/templ:latest generate'
+			}
 		}
 		stage('Build go binary') {
 			agent {
