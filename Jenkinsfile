@@ -9,14 +9,12 @@ pipeline {
 		stage('Build go binary') {
 			agent {
 				docker {
-					image 'golang:1.22-alpine3.20'
+					image 'golang:1.23-alpine3.20'
 					reuseNode true
 				}
 			}
 			steps {
-				sh 'go install github.com/a-h/templ/cmd/templ@latest'
 				sh 'go mod tidy'
-				sh 'templ generate'
 				sh 'go build main.go'
 			}
 		}
