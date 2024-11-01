@@ -15,14 +15,20 @@ templ allAlbumsTempl(albums []utils.Album) {
 				Albums
 			</h1>
 			<div class="px-2">
-				<input
-					class="inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600"
-					placeholder="Search albums"
-					name="s"
-					hx-get="/album/"
-					hx-trigger="keyup changed delay:500ms"
+				<form
+					action="/album/"
+					method="GET"
+					hx-boost="true"
 					hx-target="#album-list"
-				/>
+					hx-trigger="keyup changed delay:500ms from:input, search"
+				>
+					<input
+						class="inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600"
+						type="search"
+						placeholder="Search albums"
+						name="s"
+					/>
+				</form>
 			</div>
 			<br/>
 			<div id="album-list" class="grid grid-cols-3 gap-2 px-2">
