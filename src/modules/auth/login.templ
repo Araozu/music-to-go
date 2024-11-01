@@ -7,7 +7,7 @@ templ LoginTempl() {
 		<nav class="bg-sky-500 text-white text-xl font-bold p-2">
 			music to go
 		</nav>
-		<div hx-ext="response-targets">
+		<div hx-ext="response-targets" class="container">
 			Login to Navidrome:
 			<br/>
 			<form
@@ -22,7 +22,7 @@ templ LoginTempl() {
 				</label>
 				<input
 					id="navidrome-url"
-					class="w-full py-1 px-2 rounded"
+					class="w-full py-1 px-2 rounded bg-c-bg text-c-on-bg border border-sky-400"
 					placeholder="https://"
 					name="navidrome-url"
 					required
@@ -33,7 +33,7 @@ templ LoginTempl() {
 				</label>
 				<input
 					id="username"
-					class="w-full py-1 px-2 rounded"
+					class="w-full py-1 px-2 rounded bg-c-bg text-c-on-bg border border-sky-400"
 					placeholder="username"
 					name="username"
 					required
@@ -44,7 +44,7 @@ templ LoginTempl() {
 				</label>
 				<input
 					id="password"
-					class="w-full py-1 px-2 rounded"
+					class="w-full py-1 px-2 rounded bg-c-bg text-c-on-bg border border-sky-400"
 					placeholder="password"
 					name="password"
 					type="password"
