@@ -59,31 +59,35 @@ templ albumsFragment(albums []utils.Album) {
 // Renders the page of a single Album
 templ albumTempl(albumId string, album *utils.Album, songs []utils.Song, songsJson string) {
 	@utils.SkeletonTempl() {
-		<div
-			class="text-center"
-			_={ fmt.Sprintf("init set $songsJson to %s", songsJson) }
-		>
-			<img class="inline-block mt-2 rounded shadow" src={ fmt.Sprintf("/covers/%s", albumId) }/>
-			<h1 class="font-bold pt-4 pb-2 text-2xl">
-				{ album.Name }
-			</h1>
-			<p>
-				{ album.Artist }
-			</p>
-			<div>
-				for i, song := range songs {
-					<button
-						class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 hover:dark:bg-sky-950 whitespace-nowrap overflow-hidden overflow-ellipsis transition-colors"
-						_={ fmt.Sprintf("on click replaceQueueAndPlayAt($songsJson, %d)", i) }
-					>
-						<span class="inline-block w-6 text-right opacity-75 pr-2">
-							{ strconv.Itoa(song.TrackNumber) }
-						</span>
-						{ song.Title }
-					</button>
-				}
-			</div>
-		</div>
-		@utils.MusicPlayer()
+		@albumTemplFragment(albumId, album, songs, songsJson)
 	}
+}
+
+// Renders the page of a single album, but as a fragment without a skeleton
+templ albumTemplFragment(albumId string, album *utils.Album, songs []utils.Song, songsJson string) {
+	<div
+		class="text-center"
+		_={ fmt.Sprintf("init set $songsJson to %s", songsJson) }
+	>
+		<img class="inline-block mt-2 rounded shadow" src={ fmt.Sprintf("/covers/%s", albumId) }/>
+		<h1 class="font-bold pt-4 pb-2 text-2xl">
+			{ album.Name }
+		</h1>
+		<p>
+			{ album.Artist }
+		</p>
+		<div>
+			for i, song := range songs {
+				<button
+					class="inline-block py-2 pl-2 pr-4 w-full cursor-pointer text-left hover:bg-sky-100 hover:dark:bg-sky-950 whitespace-nowrap overflow-hidden overflow-ellipsis transition-colors"
+					_={ fmt.Sprintf("on click replaceQueueAndPlayAt($songsJson, %d)", i) }
+				>
+					<span class="inline-block w-6 text-right opacity-75 pr-2">
+						{ strconv.Itoa(song.TrackNumber) }
+					</span>
+					{ song.Title }
+				</button>
+			}
+		</div>
+	</div>
 }

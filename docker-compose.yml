@@ -7,4 +7,19 @@ services:
     ports:
       - "8007:8007"
     restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.music.rule=Host(`music.araozu.dev`)"
+      - "traefik.http.routers.music.entrypoints=websecure"
+      - "traefik.http.routers.music.tls=true"
+      - "traefik.http.routers.music.tls.certresolver=araozu-wildcard"
+      - "traefik.http.routers.music.tls.domains[0].main=araozu.dev"
+      - "traefik.http.routers.music.tls.domains[0].sans=*.araozu.dev"
+
+
+networks:
+  proxy:
+    external: true
 

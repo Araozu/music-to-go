@@ -52,6 +52,7 @@ func allAlbumsPage(c echo.Context) error {
 
 func albumPage(c echo.Context) error {
 	token, server := utils.Credentials(c)
+	isHtmxRequest := c.Request().Header.Get("HX-Request") == "true"
 	albumId := c.Param("id")
 
 	// load album info and song list on the background
@@ -110,5 +111,9 @@ func albumPage(c echo.Context) error {
 	}
 	clientSongsJson := buff.String()
 
-	return utils.RenderTempl(c, http.StatusOK, albumTempl(albumId, album, songs, string(clientSongsJson)))
+	if isHtmxRequest {
+		return utils.RenderTempl(c, http.StatusOK, albumTemplFragment(albumId, album, songs, string(clientSongsJson)))
+	} else {
+		return utils.RenderTempl(c, http.StatusOK, albumTempl(albumId, album, songs, string(clientSongsJson)))
+	}
 }

@@ -16,13 +16,15 @@ templ SkeletonTempl() {
 			<script src="/public/js/htmx.min.js" defer></script>
 			<script src="/public/js/_hyperscript.min.js" defer></script>
 			<script src="/public/js/howler.min.js" defer></script>
+			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 			<script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js" defer></script>
 		</head>
 		<body>
-			<main class="pb-16">
+			<main hx-boost="true" hx-target="this" hx-swap="innerHTML" id="boost-target" class="pb-16">
 				{ children... }
 			</main>
+			@MusicPlayer()
 		</body>
 	</html>
 }
@@ -31,6 +33,7 @@ templ MusicPlayer() {
 	<div
 		id="music-player"
 		class="fixed bottom-0 left-0 w-screen border-t bg-c-bg text-c-on-bg border-sky-500 grid grid-cols-[3rem_auto_3rem_3rem] gap-2 p-1"
+		hx-preserve
 		x-data="player"
 	>
 		<div
@@ -76,20 +79,27 @@ templ MusicPlayer() {
 		</button>
 		@fullMusicPlayer()
 		<script>
+		console.log("I'm being re-run :o");
 		document.addEventListener('alpine:init', () => {
-			Alpine.data("player", () => ({
-				init() {
-					window.replaceQueueAndPlayAt = (...params) => this.replaceQueueAndPlayAt(...params);
-				},
-				queue: [],
-				idx: 0,
-				currentSound: null,
-				nextSound: null,
-				volume: 0.1,
-				playing: false,
-				loading: false,
-				progress: 0,
+			Alpine.data("player", function() {
+			return {
+				queue: this.$persist([]),
+				idx: this.$persist(0),
+				volume: this.$persist(0.1),
+				playing: this.$persist(false),
+				loading: this.$persist(false),
+				progress: this.$persist(0),
+				// These cannot be persisted because they cannot be stored in localstorage
 				listenerInterval: 0,
+				//currentSound: null,
+				//nextSound: null,
+
+				init() {
+					console.log("calling alpine init method...")
+					window.replaceQueueAndPlayAt = (...params) => this.replaceQueueAndPlayAt(...params);
+					window.currentSound = null;
+					window.nextSound = null;
+				},
 
 				// sets the queue, and plays the song at idx
 				replaceQueueAndPlayAt(queue, idx) {
@@ -109,30 +119,30 @@ templ MusicPlayer() {
 				// If preloaded=true, this function will assume that it is the
 				// next song. It will trust that idx is correct.
 				async play(idx) {
-					const preloaded = this.nextSound !== null && idx === this.idx + 1;
+					const preloaded = window.nextSound !== null && idx === this.idx + 1;
 
 					// if a song is currently playing
 					// then fade it out before playing the next sound
 					if (this.playing === true 
-						&& this.currentSound !== null 
+						&& window.currentSound !== null 
 					) {
 						// this will not trigger when next() is called,
 						// because next() sets this.playing=false
 
-						this.currentSound.fade(this.volume, 0.0, 250);
+						window.currentSound.fade(this.volume, 0.0, 250);
 						await wait(250);
 					}
 
-					this.currentSound?.unload?.();
+					window.currentSound?.unload?.();
 					this.playing = false;
-					this.currentSound = null;
+					window.currentSound = null;
 					this.idx = idx;
 
 					// if a song is preloaded, assume it's the next song and play it
-					if (preloaded === true && this.nextSound !== null) {
-						this.currentSound = this.nextSound;
-						this.nextSound = null;
-						this.currentSound.play();
+					if (preloaded === true && window.nextSound !== null) {
+						window.currentSound = window.nextSound;
+						window.nextSound = null;
+						window.currentSound.play();
 						this.playing = true;
 					} else {
 						// otherwise, load the song at idx and play it
@@ -143,7 +153,7 @@ templ MusicPlayer() {
 							html5: true,
 							volume: this.volume,
 						});
-						this.currentSound = sound;
+						window.currentSound = sound;
 						this.loading = true;
 						sound.play();
 						sound.once("load", () => {
@@ -153,7 +163,7 @@ templ MusicPlayer() {
 					}
 
 					// set-up preloading for the next song
-					const sound = this.currentSound;
+					const sound = window.currentSound;
 					sound.once("play", () => {
 						const length = sound.duration();
 						const targetLength = length - 5;
@@ -172,14 +182,14 @@ templ MusicPlayer() {
 						this.playing = false;
 						this.next();
 					});
-					this.currentSound = sound;
+					window.currentSound = sound;
 				},
 
 				// checks the duration of the playing song and:
 				// - updates the song progress (0-100%)
 				// - begins preloading
 				checkDuration() {
-					const sound = this.currentSound;
+					const sound = window.currentSound;
 					if (this.playing) {
 						const length = sound.duration();
 						if (length <= 0) return;
@@ -187,7 +197,7 @@ templ MusicPlayer() {
 						const position = sound.seek();
 
 						// preload 5s before the song ends
-						if (position >= length - 5 && this.nextSound === null) {
+						if (position >= length - 5 && window.nextSound === null) {
 							this.preload();
 						}
 
@@ -199,10 +209,10 @@ templ MusicPlayer() {
 				togglePlayPause() {
 					if (this.playing === true) {
 						this.playing = false;
-						this.currentSound?.pause();
+						window.currentSound?.pause();
 					} else {
 						this.playing = true;
-						this.currentSound?.play();
+						window.currentSound?.play();
 					}
 				},
 				next() {
@@ -236,9 +246,10 @@ templ MusicPlayer() {
 						nextSound.seek(0);
 						nextSound.volume(this.volume);
 					});
-					this.nextSound = nextSound;
+					window.nextSound = nextSound;
 				}
-			}));
+			}
+		});
 		})
 
 		function wait(ms) {
