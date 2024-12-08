@@ -3,6 +3,7 @@ package index
 import (
 	"acide/src/utils"
 	"fmt"
+	"strconv"
 )
 
 templ IndexTempl(albums []utils.Album) {
@@ -15,15 +16,31 @@ templ IndexTempl(albums []utils.Album) {
 				Albums
 			</a>
 		</div>
-		<h2 class="font-bold text-xl px-2 pt-2">
+		<h2 class="font-bold text-xl px-2 pt-2 flex items-center gap-4">
 			Random Albums
+			<button
+				type="button"
+				class="disabled:cursor-not-allowed"
+				data-loading-class="animate-spin"
+				data-loading-disable
+				data-loading-path="/?refresh=true"
+				hx-get="/?refresh=true"
+				hx-target="#random-albums"
+				hx-swap="outerHTML"
+			>
+				@arrowClockwiseIcon(24)
+			</button>
 		</h2>
-		<div class="overflow-x-scroll whitespace-nowrap py-2 flex gap-2 px-2">
-			for _, album := range albums {
-				@AlbumCard(album)
-			}
-		</div>
+		@RandomAlbumsFragment(albums)
 	}
+}
+
+templ RandomAlbumsFragment(albums []utils.Album) {
+	<div id="random-albums" class="overflow-x-scroll whitespace-nowrap py-2 flex gap-2 px-2">
+		for _, album := range albums {
+			@AlbumCard(album)
+		}
+	</div>
 }
 
 templ AlbumCard(album utils.Album) {
@@ -43,4 +60,18 @@ templ AlbumCard(album utils.Album) {
 			</div>
 		</div>
 	</div>
+}
+
+templ arrowClockwiseIcon(size int) {
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		fill="var(--c-on-bg)"
+		viewBox="0 0 256 256"
+		style="--darkreader-inline-fill: #000000;"
+		data-darkreader-inline-fill=""
+		width={ strconv.Itoa(size) }
+		height={ strconv.Itoa(size) }
+	>
+		<path d="M240,56v48a8,8,0,0,1-8,8H184a8,8,0,0,1,0-16H211.4L184.81,71.64l-.25-.24a80,80,0,1,0-1.67,114.78,8,8,0,0,1,11,11.63A95.44,95.44,0,0,1,128,224h-1.32A96,96,0,1,1,195.75,60L224,85.8V56a8,8,0,1,1,16,0Z"></path>
+	</svg>
 }

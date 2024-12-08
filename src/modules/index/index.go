@@ -19,10 +19,16 @@ func SetupRoutes(g *echo.Group) {
 }
 
 func indexPage(c echo.Context) error {
+	refreshQuery := c.QueryParam("refresh")
+
 	sessionToken, navidromeUrl := utils.Credentials(c)
 	albums, err := getRandomAlbums(sessionToken, navidromeUrl, 10)
 	if err != nil {
 		return c.HTML(http.StatusBadRequest, fmt.Sprintf("%s", err))
+	}
+
+	if refreshQuery == "true" {
+		return utils.RenderTempl(c, http.StatusOK, RandomAlbumsFragment(albums))
 	}
 
 	return utils.RenderTempl(c, http.StatusOK, IndexTempl(albums))
