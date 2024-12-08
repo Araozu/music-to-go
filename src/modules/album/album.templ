@@ -74,7 +74,12 @@ templ albumTemplFragment(albumId string, album *utils.Album, songs []utils.Song,
 			{ album.Name }
 		</h1>
 		<p>
-			{ album.Artist }
+			<a
+				href={ templ.URL(fmt.Sprintf("/artist/%s", album.ArtistID)) }
+				class="inline-block w-full overflow-hidden whitespace-nowrap overflow-ellipsis hover:underline text-sm"
+			>
+				{ album.Artist }
+			</a>
 		</p>
 		<div>
 			for i, song := range songs {
