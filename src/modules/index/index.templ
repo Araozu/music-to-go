@@ -29,7 +29,9 @@ templ IndexTempl(albums []utils.Album) {
 templ AlbumCard(album utils.Album) {
 	<div class="inline-block p-1 rounded bg-zinc-200 dark:bg-zinc-800">
 		<div class="h-30 w-28 relative">
-			<img class="w-full" src={ fmt.Sprintf("/covers/%s", album.ID) }/>
+			<div class="text-center">
+				<img class="inline-block w-[6.75rem] h-[6.75rem] min-h-26 overflow-hidden rounded" src={ fmt.Sprintf("/covers/%s", album.ID) }/>
+			</div>
 			<a
 				href={ templ.URL(fmt.Sprintf("/album/%s", album.ID)) }
 				class="inline-block w-full overflow-hidden whitespace-nowrap overflow-ellipsis hover:underline"

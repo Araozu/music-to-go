@@ -8,30 +8,41 @@ import (
 )
 
 // Renders a page with all albums passed to it
-templ allAlbumsTempl(albums []utils.Album) {
+templ allAlbumsTempl(albums []utils.Album, query string) {
 	@utils.SkeletonTempl() {
-		<div>
-			<h1 class="font-bold pt-4 pb-2 text-2xl">
-				Albums
-			</h1>
-			<div class="px-2">
-				<form
-					action="/album/"
-					method="GET"
-					hx-boost="true"
-					hx-target="#album-list"
-					hx-trigger="keyup changed delay:500ms from:input, search"
-				>
-					<input
-						class="inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600"
-						type="search"
-						placeholder="Search albums"
-						name="s"
-					/>
-				</form>
-			</div>
-			<br/>
-			<div id="album-list" class="grid grid-cols-3 gap-2 px-2">
+		@albumsFragment(albums, query)
+	}
+}
+
+templ albumsFragment(albums []utils.Album, query string) {
+	<div id="album-list">
+		<h1 class="font-bold pt-4 pb-2 text-2xl">
+			Albums
+		</h1>
+		<div class="px-2">
+			<form
+				action="/album/"
+				method="GET"
+				hx-boost="true"
+				hx-target="#album-list"
+				hx-trigger="keyup changed delay:500ms from:input, search"
+			>
+				<input
+					class="inline-block w-full py-1 px-2 border border-sky-600 rounded-md text-sky-600"
+					type="search"
+					placeholder="Search albums"
+					value={ query }
+					name="s"
+				/>
+			</form>
+		</div>
+		<br/>
+		<div id="album-list" class="flex flex-wrap justify-evenly gap-2 px-2">
+			if len(albums) == 0 {
+				<p>
+					No albums found
+				</p>
+			} else {
 				for _, album := range albums {
 					@index.AlbumCard(album)
 				}
@@ -40,20 +51,9 @@ templ allAlbumsTempl(albums []utils.Album) {
 						No albums found
 					</p>
 				}
-			</div>
+			}
 		</div>
-	}
-}
-
-templ albumsFragment(albums []utils.Album) {
-	for _, album := range albums {
-		@index.AlbumCard(album)
-	}
-	if len(albums) == 0 {
-		<p>
-			No albums found
-		</p>
-	}
+	</div>
 }
 
 // Renders the page of a single Album

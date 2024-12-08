@@ -43,10 +43,10 @@ func allAlbumsPage(c echo.Context) error {
 
 	if isHtmxRequest {
 		// return just a fragment
-		return utils.RenderTempl(c, http.StatusOK, albumsFragment(albums))
+		return utils.RenderTempl(c, http.StatusOK, albumsFragment(albums, searchQuery))
 	} else {
 		// return a full-blown html page
-		return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl(albums))
+		return utils.RenderTempl(c, http.StatusOK, allAlbumsTempl(albums, searchQuery))
 	}
 }
 
