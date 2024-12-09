@@ -2,6 +2,7 @@ package src
 
 import (
 	"acide/src/modules/album"
+	"acide/src/modules/artist"
 	"acide/src/modules/auth"
 	"acide/src/modules/covers"
 	"acide/src/modules/index"
@@ -31,6 +32,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	auth.SetupRoutes(e.Group("/auth"))
 	covers.Setup(e.Group("/covers"))
 	album.Setup(e.Group("/album"))
+	artist.Setup(e.Group("/artist"))
 
 	return e
 }
