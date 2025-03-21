@@ -29,3 +29,14 @@ func SetupRoutes(g *echo.Group) {
 	g.GET("/", loginPage)
 	g.POST("/f/login", loginFragment)
 }
+
+func SetupApiRoutes(g *echo.Group) {
+	log.Print("Setting up the auth API module")
+
+	g.POST("/login", func(ctx echo.Context) error {
+		res := ctx.Response()
+		res.Header().Add("x-auth-token", "prosor-prosor")
+
+		return nil
+	})
+}
