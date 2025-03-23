@@ -3,7 +3,7 @@ package auth
 import (
 	"log"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -33,10 +33,5 @@ func SetupRoutes(g *echo.Group) {
 func SetupApiRoutes(g *echo.Group) {
 	log.Print("Setting up the auth API module")
 
-	g.POST("/login", func(ctx echo.Context) error {
-		res := ctx.Response()
-		res.Header().Add("x-auth-token", "prosor-prosor")
-
-		return nil
-	})
+	g.POST("/login", LoginApi)
 }

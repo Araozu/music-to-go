@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/a-h/templ"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // Middleware that allows only requests with the `session-token` and `navidrome-url` cookies set

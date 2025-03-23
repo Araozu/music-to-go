@@ -4,14 +4,17 @@ go 1.23.1
 
 require (
 	github.com/a-h/templ v0.3.819
-	github.com/labstack/echo v3.3.10+incompatible
 	gorm.io/gorm v1.25.12
 )
 
-require github.com/go-resty/resty/v2 v2.15.3
+require (
+	github.com/go-resty/resty/v2 v2.15.3
+	github.com/labstack/echo/v4 v4.13.3
+)
+
+require golang.org/x/time v0.8.0 // indirect
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.5.5 // indirect
