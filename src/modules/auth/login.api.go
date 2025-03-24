@@ -32,11 +32,18 @@ func LoginApi(ctx echo.Context) error {
 	// res.Header().Add("x-auth-token", "prosor-prosor")
 
 	cookie := new(http.Cookie)
-	cookie.Name = "x-auth-token"
+	cookie.Name = "session-token"
 	cookie.Value = sessionKey
 	cookie.Path = "/"
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 
+	urlcookie := new(http.Cookie)
+	urlcookie.Name = "navidrome-url"
+	urlcookie.Value = input.Url
+	urlcookie.Path = "/"
+	urlcookie.Expires = time.Now().Add(24 * time.Hour)
+
 	ctx.SetCookie(cookie)
+	ctx.SetCookie(urlcookie)
 	return nil
 }

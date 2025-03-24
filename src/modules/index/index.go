@@ -6,16 +6,19 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 )
 
 func SetupRoutes(g *echo.Group) {
-	log.Print("Setting up the index module")
-
 	g.Use(utils.Authed)
 
 	// To include custom rendering logic:
 	g.GET("/", indexPage)
+}
+
+func SetupApiRoutes(g *echo.Group) {
+	g.Use(utils.Authed)
+
+	g.GET("/random-albums", randomAlbumsApi)
 }
 
 func indexPage(c echo.Context) error {

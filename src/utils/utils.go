@@ -16,12 +16,12 @@ func Authed(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		_, err := c.Cookie("session-token")
 		if err != nil {
-			c.Redirect(http.StatusFound, "/auth/")
+			c.Redirect(http.StatusUnauthorized, "/auth/")
 			return nil
 		}
 		_, err = c.Cookie("navidrome-url")
 		if err != nil {
-			c.Redirect(http.StatusFound, "/auth/")
+			c.Redirect(http.StatusUnauthorized, "/auth/")
 			return nil
 		}
 
