@@ -37,6 +37,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	// API Routes
 	auth.SetupApiRoutes(e.Group("/api/auth"))
 	index.SetupApiRoutes(e.Group("/api/index"))
+	album.SetupApiRoutes(e.Group("/api/album"))
 
 	return e
 }

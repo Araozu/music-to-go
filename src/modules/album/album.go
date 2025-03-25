@@ -21,11 +21,16 @@ type ClientSong struct {
 }
 
 func Setup(g *echo.Group) {
-	log.Print("Setting up the album module")
 	g.Use(utils.Authed)
 
 	g.GET("/", allAlbumsPage)
 	g.GET("/:id", albumPage)
+}
+
+func SetupApiRoutes(g *echo.Group) {
+	g.Use(utils.Authed)
+
+	g.GET("/:id", getAlbumApi)
 }
 
 func allAlbumsPage(c echo.Context) error {
